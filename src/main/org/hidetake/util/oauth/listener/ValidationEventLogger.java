@@ -1,6 +1,7 @@
 package org.hidetake.util.oauth.listener;
 
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.FilterConfig;
@@ -26,9 +27,12 @@ public class ValidationEventLogger implements ValidationEventListener
 	private static final Logger log = Logger.getLogger(ValidationEventLogger.class.getName());
 
 	@Override
-	public void init(FilterConfig config) throws ServletException
+	public void init(FilterConfig config, List<ValidationEventListener> listenerList)
+	throws ServletException
 	{
-		log.info("Initializing opensocial-oauth-filter");
+		for(ValidationEventListener listener : listenerList) {
+			log.info("Registered event listener: " + listener.getClass().getName());
+		}
 	}
 	
 	@Override

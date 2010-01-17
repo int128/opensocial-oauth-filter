@@ -1,6 +1,7 @@
 package org.hidetake.util.oauth;
 
 import java.net.URISyntaxException;
+import java.util.List;
 
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
@@ -33,9 +34,11 @@ public interface ValidationEventListener
 	 * </ol>
 	 * 
 	 * @see javax.servlet.Filter#init(FilterConfig)
-	 * @param config
+	 * @param config servlet filter config
+	 * @param listenerList ValidationEventListener defined in web.xml
 	 */
-	public void init(FilterConfig config) throws ServletException;
+	public void init(FilterConfig config, List<ValidationEventListener> listenerList)
+	throws ServletException;
 	
 	/**
 	 * Must return true if want to skip validation.

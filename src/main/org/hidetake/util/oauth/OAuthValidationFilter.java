@@ -74,7 +74,7 @@ public class OAuthValidationFilter implements Filter
 			if(eventListenerNames == null) {
 			}
 			else {
-				for(String eventListenerName : eventListenerNames.split(",")) {
+				for(String eventListenerName : eventListenerNames.split(",|\\s+")) {
 					ValidationEventListener eventListener =
 						(ValidationEventListener) Class.forName(eventListenerName).newInstance();
 					eventListeners.add(eventListener);
@@ -83,7 +83,7 @@ public class OAuthValidationFilter implements Filter
 			
 			// initialize listeners
 			for(ValidationEventListener eventListener : eventListeners) {
-				eventListener.init(config);
+				eventListener.init(config, eventListeners);
 			}
 		}
 		catch (InstantiationException e) {
