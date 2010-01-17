@@ -3,6 +3,8 @@ package org.hidetake.util.oauth.listener;
 import java.net.URISyntaxException;
 import java.util.logging.Logger;
 
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +16,7 @@ import org.hidetake.util.oauth.ValidationEventListener;
 
 /**
  * 
- * Logger class for validation events.
+ * Logger for validation events.
  * 
  * @author hidetake.org
  *
@@ -24,22 +26,28 @@ public class ValidationEventLogger implements ValidationEventListener
 	private static final Logger log = Logger.getLogger(ValidationEventLogger.class.getName());
 
 	@Override
+	public void init(FilterConfig config) throws ServletException
+	{
+		log.info("Initializing opensocial-oauth-filter");
+	}
+	
+	@Override
 	public void manipulateURL(StringBuilder url, HttpServletRequest request)
 	{
-		log.info("OAuth message URL: " + url);
+		log.fine("OAuth message URL: " + url);
 	}
 
 	@Override
 	public boolean onOAuthException(HttpServletRequest request, HttpServletResponse response, OAuthException e)
 	{
-		log.warning("Validation failed: " + e.getLocalizedMessage());
+		log.severe("Validation failed: " + e.getLocalizedMessage());
 		return false;
 	}
 
 	@Override
 	public boolean onURISyntaxException(HttpServletRequest request, HttpServletResponse response, URISyntaxException e)
 	{
-		log.warning("Validation failed: " + e.getLocalizedMessage());
+		log.severe("Validation failed: " + e.getLocalizedMessage());
 		return false;
 	}
 
