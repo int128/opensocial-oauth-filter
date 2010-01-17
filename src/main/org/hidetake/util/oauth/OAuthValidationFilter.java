@@ -80,6 +80,11 @@ public class OAuthValidationFilter implements Filter
 					eventListeners.add(eventListener);
 				}
 			}
+			
+			// initialize listeners
+			for(ValidationEventListener eventListener : eventListeners) {
+				eventListener.init(config);
+			}
 		}
 		catch (InstantiationException e) {
 			throw new ServletException(e);

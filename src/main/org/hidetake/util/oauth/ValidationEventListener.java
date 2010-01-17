@@ -2,6 +2,8 @@ package org.hidetake.util.oauth;
 
 import java.net.URISyntaxException;
 
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +21,22 @@ import net.oauth.OAuthMessage;
 public interface ValidationEventListener
 {
 
+	/**
+	 * Called by the web container to indicate to a filter that it is being placed into service.
+	 * The servlet container calls the init method exactly once after instantiating the filter.
+	 * The init method must complete successfully before the filter is asked to do any filtering work.
+	 * 
+	 * The web container cannot place the filter into service if the init method either
+	 * <ol>
+	 * <li>Throws a ServletException</li>
+	 * <li>Does not return within a time period defined by the web container</li> 
+	 * </ol>
+	 * 
+	 * @see javax.servlet.Filter#init(FilterConfig)
+	 * @param config
+	 */
+	public void init(FilterConfig config) throws ServletException;
+	
 	/**
 	 * Must return true if want to skip validation.
 	 * 
