@@ -3,63 +3,41 @@
 	elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns="http://xmlns.hidetake.org/opensocial-oauth-filter">
 
-	<xsd:element name="opensocial-container" type="opensocial-container-type">
+	<xsd:element name="config">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="opensocial-container" maxOccurs="unbounded"
+					minOccurs="1">
+					<xsd:complexType>
+						<xsd:all minOccurs="1" maxOccurs="1">
+							<xsd:element name="oauth-consumer-key"
+								maxOccurs="1" minOccurs="1" type="xsd:string">
+							</xsd:element>
+							<xsd:element name="oauth-signature-method"
+								maxOccurs="1" minOccurs="1" type="xsd:string">
+							</xsd:element>
+							<xsd:element name="oauth-certificate"
+								maxOccurs="1" minOccurs="1" type="xsd:string">
+							</xsd:element>
+						</xsd:all>
+						<xsd:attribute name="id" type="xsd:string"
+							use="optional">
+						</xsd:attribute>
+						<xsd:attribute name="trusted"
+							type="xsd:boolean" use="required">
+						</xsd:attribute>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="validation-event-listener" maxOccurs="unbounded"
+					minOccurs="0">
+					<xsd:complexType>
+						<xsd:attribute name="classname"
+							type="xsd:string" use="required">
+						</xsd:attribute>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
 	</xsd:element>
 
-
-	<xsd:element name="opensocial-oauth-filter" type="opensocial-oauth-filter-type"></xsd:element>
-
-	<xsd:complexType name="opensocial-oauth-filter-type">
-		<xsd:all>
-			<xsd:element ref="opensocial-container"></xsd:element>
-			<xsd:element ref="validation-event-listeners"></xsd:element>
-		</xsd:all>
-
-	</xsd:complexType>
-
-	<xsd:complexType name="opensocial-container-type">
-		<xsd:all minOccurs="1" maxOccurs="1">
-			<xsd:element name="oauth-consumer-key">
-				<xsd:simpleType>
-					<xsd:restriction base="xsd:string">
-						<xsd:minLength value="1"></xsd:minLength>
-					</xsd:restriction>
-				</xsd:simpleType>
-			</xsd:element>
-			<xsd:element name="oauth-signature-method">
-				<xsd:simpleType>
-					<xsd:restriction base="xsd:string">
-						<xsd:minLength value="1"></xsd:minLength>
-					</xsd:restriction>
-				</xsd:simpleType>
-			</xsd:element>
-			<xsd:element name="oauth-certificate">
-				<xsd:simpleType>
-					<xsd:restriction base="xsd:string">
-						<xsd:minLength value="1"></xsd:minLength>
-					</xsd:restriction>
-				</xsd:simpleType>
-			</xsd:element>
-		</xsd:all>
-    </xsd:complexType>
-
-    <xsd:element name="validation-event-listeners" type="validation-event-listeners-type"></xsd:element>
-
-    <xsd:complexType name="validation-event-listeners-type">
-        <xsd:all minOccurs="0">
-    		<xsd:element ref="validation-event-listener"></xsd:element>
-    	</xsd:all>
-    </xsd:complexType>
-
-    <xsd:complexType name="validation-event-listener-type">
-    	<xsd:attribute name="classname">
-    		<xsd:simpleType>
-    			<xsd:restriction base="xsd:string">
-    				<xsd:minLength value="1"></xsd:minLength>
-    			</xsd:restriction>
-    		</xsd:simpleType>
-    	</xsd:attribute>
-    </xsd:complexType>
-    
-    <xsd:element name="validation-event-listener" type="validation-event-listener-type"></xsd:element>
 </xsd:schema>

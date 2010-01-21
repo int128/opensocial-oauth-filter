@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<opensocial-oauth-filter
-	xmlns="http://xmlns.hidetake.org/opensocial-oauth-filter"
+<config xmlns="http://xmlns.hidetake.org/opensocial-oauth-filter"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.hidetake.org/opensocial-oauth-filter opensocial-oauth-filter.xsd">
 
-	<opensocial-container>
+	<opensocial-container id="mixi" trusted="true">
 		<oauth-consumer-key>mixi.jp</oauth-consumer-key>
 		<oauth-signature-method>RSA-SHA1</oauth-signature-method>
 		<oauth-certificate>
@@ -29,8 +28,7 @@ nOLWEi16qH9WuBs=
 		</oauth-certificate>
 	</opensocial-container>
 
-	<validation-event-listeners>
-		<validation-event-listener classname="org.hidetake.util.oauth.listener.ValidationEventLogger" />
-	</validation-event-listeners>
+	<validation-event-listener classname="org.hidetake.util.oauth.listener.ValidationEventLogger" />
+	<validation-event-listener classname="org.hidetake.util.oauth.listener.AllowLocalhost" />
 
-</opensocial-oauth-filter>
+</config>
