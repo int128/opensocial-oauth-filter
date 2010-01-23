@@ -26,7 +26,6 @@ public class ValidationEventLogger implements ValidationEventListener
 {
 	private static final Logger log = Logger.getLogger(ValidationEventLogger.class.getName());
 
-	@Override
 	public void init(FilterConfig config, List<ValidationEventListener> listenerList)
 	throws ServletException
 	{
@@ -35,33 +34,28 @@ public class ValidationEventLogger implements ValidationEventListener
 		}
 	}
 	
-	@Override
 	public void manipulateURL(StringBuilder url, HttpServletRequest request)
 	{
 		log.fine("OAuth message URL: " + url);
 	}
 
-	@Override
 	public boolean onOAuthException(HttpServletRequest request, HttpServletResponse response, OAuthException e)
 	{
 		log.severe("Validation failed: " + e.getLocalizedMessage());
 		return false;
 	}
 
-	@Override
 	public boolean onURISyntaxException(HttpServletRequest request, HttpServletResponse response, URISyntaxException e)
 	{
 		log.severe("Validation failed: " + e.getLocalizedMessage());
 		return false;
 	}
 
-	@Override
 	public void onValidationComplete(HttpServletResponse response)
 	{
 		log.info("Validation complete");
 	}
 
-	@Override
 	public boolean isSkippingValidation(ServletRequest req, ServletResponse res)
 	{
 		return false;

@@ -24,19 +24,16 @@ import org.hidetake.util.oauth.ValidationEventListener;
 public class ReverseProxyURLManipulator implements ValidationEventListener
 {
 
-	@Override
 	public void init(FilterConfig config, List<ValidationEventListener> listenerList)
 	throws ServletException
 	{
 	}
 	
-	@Override
 	public boolean isSkippingValidation(ServletRequest req, ServletResponse res)
 	{
 		return false;
 	}
 
-	@Override
 	public void manipulateURL(StringBuilder url, HttpServletRequest request)
 	{
 		// look up X-Forwarded-Host header
@@ -61,19 +58,16 @@ public class ReverseProxyURLManipulator implements ValidationEventListener
 		}
 	}
 
-	@Override
 	public boolean onOAuthException(HttpServletRequest request, HttpServletResponse response, OAuthException e)
 	{
 		return false;
 	}
 
-	@Override
 	public boolean onURISyntaxException(HttpServletRequest request, HttpServletResponse response, URISyntaxException e)
 	{
 		return false;
 	}
 
-	@Override
 	public void onValidationComplete(HttpServletResponse response)
 	{
 	}

@@ -20,13 +20,11 @@ public class AllowLocalhost implements ValidationEventListener
 
 	private static final Logger log = Logger.getLogger(AllowLocalhost.class.getName());
 	
-	@Override
 	public void init(FilterConfig config, List<ValidationEventListener> listenerList)
 	throws ServletException
 	{
 	}
 	
-	@Override
 	public boolean isSkippingValidation(ServletRequest arg0, ServletResponse arg1)
 	{
 		if("127.0.0.1".equals(arg0.getRemoteAddr())) {
@@ -36,24 +34,20 @@ public class AllowLocalhost implements ValidationEventListener
 		return false;
 	}
 
-	@Override
 	public void manipulateURL(StringBuilder arg0, HttpServletRequest arg1)
 	{
 	}
 
-	@Override
 	public boolean onOAuthException(HttpServletRequest arg0, HttpServletResponse arg1, OAuthException arg2)
 	{
 		return false;
 	}
 
-	@Override
 	public boolean onURISyntaxException(HttpServletRequest arg0, HttpServletResponse arg1, URISyntaxException arg2)
 	{
 		return false;
 	}
 
-	@Override
 	public void onValidationComplete(HttpServletResponse arg0)
 	{
 	}
