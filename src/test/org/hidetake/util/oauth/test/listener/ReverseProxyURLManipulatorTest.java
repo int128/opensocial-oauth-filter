@@ -1,10 +1,11 @@
-package org.hidetake.util.oauth.test;
+package org.hidetake.util.oauth.test.listener;
 
 import javax.servlet.http.HttpServletRequest;
 
 import junit.framework.Assert;
 
 import org.hidetake.util.oauth.listener.ReverseProxyURLManipulator;
+import org.hidetake.util.oauth.test.HttpServletRequestStub;
 import org.junit.Test;
 
 public class ReverseProxyURLManipulatorTest extends ReverseProxyURLManipulator

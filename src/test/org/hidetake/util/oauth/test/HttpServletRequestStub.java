@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @SuppressWarnings("unchecked")
-class HttpServletRequestStub implements HttpServletRequest
+public class HttpServletRequestStub implements HttpServletRequest
 {
 	public void setCharacterEncoding(String arg0) throws UnsupportedEncodingException {}
 	public void setAttribute(String arg0, Object arg1) {}
