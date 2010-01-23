@@ -3,11 +3,17 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.hidetake.org/opensocial-oauth-filter opensocial-oauth-filter.xsd">
 
-	<opensocial-container id="mixi" trusted="true">
-		<oauth-consumer-key>mixi.jp</oauth-consumer-key>
-		<oauth-signature-method>RSA-SHA1</oauth-signature-method>
-		<oauth-certificate>
-<![CDATA[
+	<enabled-features>
+		<opensocial-container id="mixi" />
+		<validation-event-listener classname="org.hidetake.util.oauth.listener.ValidationEventLogger" />
+		<validation-event-listener classname="org.hidetake.util.oauth.listener.AllowLocalhost" />
+	</enabled-features>
+
+	<opensocial-containers>
+		<opensocial-container id="mixi">
+			<oauth-consumer-key>mixi.jp</oauth-consumer-key>
+			<oauth-signature-method>RSA-SHA1</oauth-signature-method>
+			<oauth-certificate><![CDATA[
 -----BEGIN CERTIFICATE-----
 MIICdzCCAeCgAwIBAgIJAOi/chE0MhufMA0GCSqGSIb3DQEBBQUAMDIxCzAJBgNV
 BAYTAkpQMREwDwYDVQQKEwhtaXhpIEluYzEQMA4GA1UEAxMHbWl4aS5qcDAeFw0w
@@ -24,11 +30,9 @@ EwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAR7v8eaCaiB5xFVf9k9jOYPjCSQIJ
 h5TbGftATZCAJ8QJa3X2omCdB29qqyjz4F6QyTi930qekawPBLlWXuiP3oRNbiow
 nOLWEi16qH9WuBs=
 -----END CERTIFICATE-----
-]]>
-		</oauth-certificate>
-	</opensocial-container>
+			]]></oauth-certificate>
+		</opensocial-container>
 
-	<validation-event-listener classname="org.hidetake.util.oauth.listener.ValidationEventLogger" />
-	<validation-event-listener classname="org.hidetake.util.oauth.listener.AllowLocalhost" />
+	</opensocial-containers>
 
 </config>
