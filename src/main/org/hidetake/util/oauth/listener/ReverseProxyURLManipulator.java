@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.oauth.OAuthException;
 
+import org.hidetake.util.oauth.OpenSocialException;
 import org.hidetake.util.oauth.ValidationEventListener;
 
 /**
@@ -58,6 +59,11 @@ public class ReverseProxyURLManipulator implements ValidationEventListener
 	}
 
 	public boolean onOAuthException(HttpServletRequest request, HttpServletResponse response, OAuthException e)
+	{
+		return false;
+	}
+
+	public boolean onOpenSocialException(HttpServletRequest request, HttpServletResponse response, OpenSocialException e)
 	{
 		return false;
 	}

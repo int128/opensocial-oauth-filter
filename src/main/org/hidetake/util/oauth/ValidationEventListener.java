@@ -61,6 +61,18 @@ public interface ValidationEventListener
 	public boolean onOAuthException(HttpServletRequest request, HttpServletResponse response, OAuthException e);
 
 	/**
+	 * Called if validation was failed, caused by {@link OpenSocialException}.
+	 * 
+	 * <p>Default implementation: sends 403 response to web browser.</p>
+	 * 
+	 * @return true if response has been sent, false otherwise 
+	 * @param request servlet request object
+	 * @param response servlet response object
+	 * @param e exception
+	 */
+	public boolean onOpenSocialException(HttpServletRequest request, HttpServletResponse response, OpenSocialException e);
+
+	/**
 	 * Called if validation was succeed.
 	 * 
 	 * <p>Default implementation: do nothing.</p>

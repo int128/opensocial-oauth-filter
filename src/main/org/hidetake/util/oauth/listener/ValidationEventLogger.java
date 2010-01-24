@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.oauth.OAuthException;
 
+import org.hidetake.util.oauth.OpenSocialException;
 import org.hidetake.util.oauth.ValidationEventListener;
 
 /**
@@ -39,6 +40,12 @@ public class ValidationEventLogger implements ValidationEventListener
 	}
 
 	public boolean onOAuthException(HttpServletRequest request, HttpServletResponse response, OAuthException e)
+	{
+		log.severe("Validation failed: " + e.getLocalizedMessage());
+		return false;
+	}
+
+	public boolean onOpenSocialException(HttpServletRequest request, HttpServletResponse response, OpenSocialException e)
 	{
 		log.severe("Validation failed: " + e.getLocalizedMessage());
 		return false;

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.oauth.OAuthException;
 
+import org.hidetake.util.oauth.OpenSocialException;
 import org.hidetake.util.oauth.ValidationEventListener;
 
 public class AllowLocalhost implements ValidationEventListener
@@ -38,6 +39,11 @@ public class AllowLocalhost implements ValidationEventListener
 	}
 
 	public boolean onOAuthException(HttpServletRequest arg0, HttpServletResponse arg1, OAuthException arg2)
+	{
+		return false;
+	}
+
+	public boolean onOpenSocialException(HttpServletRequest request, HttpServletResponse response, OpenSocialException e)
 	{
 		return false;
 	}
