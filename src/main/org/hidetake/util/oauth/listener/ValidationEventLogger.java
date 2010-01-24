@@ -1,6 +1,5 @@
 package org.hidetake.util.oauth.listener;
 
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -40,12 +39,6 @@ public class ValidationEventLogger implements ValidationEventListener
 	}
 
 	public boolean onOAuthException(HttpServletRequest request, HttpServletResponse response, OAuthException e)
-	{
-		log.severe("Validation failed: " + e.getLocalizedMessage());
-		return false;
-	}
-
-	public boolean onURISyntaxException(HttpServletRequest request, HttpServletResponse response, URISyntaxException e)
 	{
 		log.severe("Validation failed: " + e.getLocalizedMessage());
 		return false;

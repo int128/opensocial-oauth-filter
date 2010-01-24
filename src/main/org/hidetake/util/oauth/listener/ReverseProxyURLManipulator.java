@@ -1,6 +1,5 @@
 package org.hidetake.util.oauth.listener;
 
-import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.servlet.FilterConfig;
@@ -59,11 +58,6 @@ public class ReverseProxyURLManipulator implements ValidationEventListener
 	}
 
 	public boolean onOAuthException(HttpServletRequest request, HttpServletResponse response, OAuthException e)
-	{
-		return false;
-	}
-
-	public boolean onURISyntaxException(HttpServletRequest request, HttpServletResponse response, URISyntaxException e)
 	{
 		return false;
 	}

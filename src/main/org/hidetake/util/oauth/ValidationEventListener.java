@@ -1,6 +1,5 @@
 package org.hidetake.util.oauth;
 
-import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.servlet.FilterConfig;
@@ -60,18 +59,6 @@ public interface ValidationEventListener
 	 * @param e exception
 	 */
 	public boolean onOAuthException(HttpServletRequest request, HttpServletResponse response, OAuthException e);
-
-	/**
-	 * Called if validation was failed, caused by {@link URISyntaxException}.
-	 * 
-	 * <p>Default implementation: sends 403 response to web browser.</p>
-	 * 
-	 * @return true if response has been sent, false otherwise 
-	 * @param request servlet request object
-	 * @param response servlet response object
-	 * @param e exception
-	 */
-	public boolean onURISyntaxException(HttpServletRequest request, HttpServletResponse response, URISyntaxException e);
 
 	/**
 	 * Called if validation was succeed.

@@ -1,6 +1,5 @@
 package org.hidetake.util.oauth.listener;
 
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -39,11 +38,6 @@ public class AllowLocalhost implements ValidationEventListener
 	}
 
 	public boolean onOAuthException(HttpServletRequest arg0, HttpServletResponse arg1, OAuthException arg2)
-	{
-		return false;
-	}
-
-	public boolean onURISyntaxException(HttpServletRequest arg0, HttpServletResponse arg1, URISyntaxException arg2)
 	{
 		return false;
 	}
