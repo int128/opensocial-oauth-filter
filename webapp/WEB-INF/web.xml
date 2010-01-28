@@ -7,16 +7,8 @@
 
     <filter>
         <filter-name>opensocial-oauth-filter</filter-name>
-        <filter-class>org.hidetake.util.oauth.OAuthValidationFilter</filter-class>
-        <init-param>
-        	<param-name>net.oauth.OAuthAccessor</param-name>
-        	<param-value>org.hidetake.util.oauth.provider.MixiOAuthAccessor</param-value>
-        </init-param>
-        <init-param>
-        	<param-name>org.hidetake.util.oauth.ValidationEventListener</param-name>
-        	<param-value>org.hidetake.util.oauth.listener.ValidationEventLogger</param-value>
-        </init-param>
-    </filter>
+        <filter-class>org.hidetake.util.oauth.OpenSocialRequestValidationFilter</filter-class>
+     </filter>
     <filter-mapping>
         <filter-name>opensocial-oauth-filter</filter-name>
         <url-pattern>/*</url-pattern>
