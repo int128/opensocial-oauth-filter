@@ -4,59 +4,55 @@
 	xmlns="http://xmlns.hidetake.org/opensocial-oauth-filter">
 	<xsd:element name="config">
 		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element ref="enabled-features"></xsd:element>
-				<xsd:element ref="opensocial-containers">
-				</xsd:element>
-			</xsd:sequence>
+            <xsd:all>
+				<xsd:element ref="features" maxOccurs="1" minOccurs="1"></xsd:element>
+				<xsd:element ref="opensocial-apps" maxOccurs="1" minOccurs="1"></xsd:element>
+				<xsd:element ref="opensocial-containers" maxOccurs="1" minOccurs="1"></xsd:element>
+			</xsd:all>
 		</xsd:complexType>
 	</xsd:element>
-    <xsd:element name="enabled-features">
+    <xsd:element name="features">
     	<xsd:complexType>
             <xsd:sequence>
-            	<xsd:sequence>
-            		<xsd:element minOccurs="1" maxOccurs="unbounded" name="opensocial-container">
-            			<xsd:complexType>
-            				<xsd:attribute name="id" type="xsd:IDREF" use="required">
-            				</xsd:attribute>
-            			</xsd:complexType>
-            		</xsd:element>
-            	</xsd:sequence>
-            	<xsd:sequence>
-            		<xsd:element minOccurs="0" maxOccurs="unbounded" name="validation-event-listener">
+                <xsd:element minOccurs="0" maxOccurs="unbounded" name="feature">
 	            		<xsd:complexType>
-	            			<xsd:attribute use="required" name="classname" type="xsd:string">
-	            			</xsd:attribute>
+	            			<xsd:attribute use="required" name="id" type="xsd:string"></xsd:attribute>
 	            		</xsd:complexType>
             		</xsd:element>
-            	</xsd:sequence>
             </xsd:sequence>
-            
-            
     	</xsd:complexType>
     </xsd:element>
     <xsd:element name="opensocial-containers">
     	<xsd:complexType>
     		<xsd:sequence>
-    			<xsd:element minOccurs="1" maxOccurs="unbounded"
-    				name="opensocial-container">
-    				<xsd:complexType>
-    					<xsd:all>
-    						<xsd:element minOccurs="1" maxOccurs="1"
-    							name="oauth-consumer-key" type="xsd:string">
-    						</xsd:element>
-    						<xsd:element minOccurs="1" maxOccurs="1"
-    							name="oauth-signature-method" type="xsd:string">
-    						</xsd:element>
-    						<xsd:element minOccurs="1" maxOccurs="1"
-    							name="oauth-certificate" type="xsd:string">
-    						</xsd:element>
-    					</xsd:all>
-    					<xsd:attribute name="id"
-    						type="xsd:ID" use="required">
-    					</xsd:attribute>
-    				</xsd:complexType>
-    			</xsd:element>
+    			<xsd:element minOccurs="1" maxOccurs="unbounded" ref="opensocial-container"></xsd:element>
+    		</xsd:sequence>
+    	</xsd:complexType>
+    </xsd:element>
+    <xsd:element name="opensocial-container">
+    	<xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="oauth" maxOccurs="1" minOccurs="1">
+                	<xsd:complexType>
+                		<xsd:sequence>
+                			<xsd:element name="certificate" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+                		</xsd:sequence>
+                		<xsd:attribute name="consumer-key" type="xsd:string"></xsd:attribute>
+                		<xsd:attribute name="signature-method" type="xsd:string"></xsd:attribute>
+                	</xsd:complexType>
+                </xsd:element>
+    		</xsd:sequence>
+    		<xsd:attribute use="required" name="id" type="xsd:ID"></xsd:attribute>
+    	</xsd:complexType>
+    </xsd:element>
+    <xsd:element name="opensocial-apps">
+    	<xsd:complexType>
+    		<xsd:sequence>
+    			<xsd:element name="opensocial-app" maxOccurs="1" minOccurs="1"><xsd:complexType>
+    		<xsd:attribute name="app-id" type="xsd:string"></xsd:attribute>
+    		<xsd:attribute name="app-url" type="xsd:anyURI"></xsd:attribute>
+    		<xsd:attribute name="container-id" type="xsd:IDREF"></xsd:attribute>
+    			</xsd:complexType></xsd:element>
     		</xsd:sequence>
     	</xsd:complexType>
     </xsd:element>
