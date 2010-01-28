@@ -1,9 +1,7 @@
 package org.hidetake.util.oauth.listener;
 
-import java.util.List;
 import java.util.logging.Logger;
 
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -12,8 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.oauth.OAuthException;
 
-import org.hidetake.util.oauth.OpenSocialException;
 import org.hidetake.util.oauth.ValidationEventListener;
+import org.hidetake.util.oauth.config.InitContext;
+import org.hidetake.util.oauth.model.OpenSocialException;
 
 /**
  * 
@@ -26,10 +25,9 @@ public class ValidationEventLogger implements ValidationEventListener
 {
 	private static final Logger log = Logger.getLogger(ValidationEventLogger.class.getName());
 
-	public void init(FilterConfig config, List<ValidationEventListener> listenerList)
-	throws ServletException
+	public void init(InitContext context) throws ServletException
 	{
-		for(ValidationEventListener listener : listenerList) {
+		for(ValidationEventListener listener : context.getValidationEventListeners()) {
 			log.info("Registered event listener: " + listener.getClass().getName());
 		}
 	}
@@ -42,6 +40,7 @@ public class ValidationEventLogger implements ValidationEventListener
 	public boolean onOAuthException(HttpServletRequest request, HttpServletResponse response, OAuthException e)
 	{
 		log.severe("Validation failed: " + e.getLocalizedMessage());
+		e.printStackTrace();
 		return false;
 	}
 

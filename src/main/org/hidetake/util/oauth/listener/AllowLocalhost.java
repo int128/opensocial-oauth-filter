@@ -1,9 +1,7 @@
 package org.hidetake.util.oauth.listener;
 
-import java.util.List;
 import java.util.logging.Logger;
 
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -12,23 +10,24 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.oauth.OAuthException;
 
-import org.hidetake.util.oauth.OpenSocialException;
 import org.hidetake.util.oauth.ValidationEventListener;
+import org.hidetake.util.oauth.config.InitContext;
+import org.hidetake.util.oauth.model.OpenSocialException;
 
 public class AllowLocalhost implements ValidationEventListener
 {
 
 	private static final Logger log = Logger.getLogger(AllowLocalhost.class.getName());
 	
-	public void init(FilterConfig config, List<ValidationEventListener> listenerList)
+	public void init(InitContext context)
 	throws ServletException
 	{
 	}
 	
 	public boolean isSkippingValidation(ServletRequest arg0, ServletResponse arg1)
 	{
-		if("127.0.0.1".equals(arg0.getRemoteAddr())) {
-			log.info("validation disabled: 127.0.0.1");
+		if("127.0.0.1".equals(arg0.getRemoteAddr()) || "0:0:0:0:0:0:0:1".equals(arg0.getRemoteAddr())) {
+			log.info("Validation disabled: " + arg0.getRemoteHost() + " [" + arg0.getRemoteAddr() + "]");
 			return true;
 		}
 		return false;

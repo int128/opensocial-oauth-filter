@@ -1,6 +1,5 @@
 package org.hidetake.util.oauth;
 
-import java.util.List;
 
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
@@ -8,6 +7,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.hidetake.util.oauth.config.InitContext;
+import org.hidetake.util.oauth.model.OpenSocialException;
 
 import net.oauth.OAuthException;
 import net.oauth.OAuthMessage;
@@ -32,12 +34,10 @@ public interface ValidationEventListener
 	 * <li>Does not return within a time period defined by the web container</li> 
 	 * </ol>
 	 * 
+	 * @param context initialization context object
 	 * @see javax.servlet.Filter#init(FilterConfig)
-	 * @param config servlet filter config
-	 * @param listenerList ValidationEventListener defined in web.xml
 	 */
-	public void init(FilterConfig config, List<ValidationEventListener> listenerList)
-	throws ServletException;
+	public void init(InitContext context) throws ServletException;
 	
 	/**
 	 * Must return true if want to skip validation.

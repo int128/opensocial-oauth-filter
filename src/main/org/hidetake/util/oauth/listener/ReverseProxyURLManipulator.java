@@ -1,8 +1,6 @@
 package org.hidetake.util.oauth.listener;
 
-import java.util.List;
 
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -11,8 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.oauth.OAuthException;
 
-import org.hidetake.util.oauth.OpenSocialException;
 import org.hidetake.util.oauth.ValidationEventListener;
+import org.hidetake.util.oauth.config.InitContext;
+import org.hidetake.util.oauth.model.OpenSocialException;
 
 /**
  * 
@@ -24,7 +23,7 @@ import org.hidetake.util.oauth.ValidationEventListener;
 public class ReverseProxyURLManipulator implements ValidationEventListener
 {
 
-	public void init(FilterConfig config, List<ValidationEventListener> listenerList)
+	public void init(InitContext context)
 	throws ServletException
 	{
 	}
