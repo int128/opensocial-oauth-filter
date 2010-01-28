@@ -2,11 +2,11 @@ package org.hidetake.util.oauth.test;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hidetake.util.oauth.OAuthValidationFilter;
+import org.hidetake.util.oauth.model.OpenSocialRequestValidator;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class OAuthValidationFilterTest extends OAuthValidationFilter
+public class OpenSocialRequestValidatorTest
 {
 
 	@Test
@@ -21,7 +21,7 @@ public class OAuthValidationFilterTest extends OAuthValidationFilter
 		};
 		final String expected = "http://www.example.com/test";
 		
-		final StringBuilder url = parseRequestUrl(input);
+		final StringBuilder url = OpenSocialRequestValidator.parseRequestUrl(input);
 		Assert.assertEquals(expected, url.toString());
 	}
 
@@ -37,7 +37,7 @@ public class OAuthValidationFilterTest extends OAuthValidationFilter
 		};
 		final String expected = "http://www.example.com/test";
 		
-		final StringBuilder url = parseRequestUrl(input);
+		final StringBuilder url = OpenSocialRequestValidator.parseRequestUrl(input);
 		Assert.assertEquals(expected, url.toString());
 	}
 
@@ -53,7 +53,7 @@ public class OAuthValidationFilterTest extends OAuthValidationFilter
 		};
 		final String expected = "http://www.example.com:8080/test";
 		
-		final StringBuilder url = parseRequestUrl(input);
+		final StringBuilder url = OpenSocialRequestValidator.parseRequestUrl(input);
 		Assert.assertEquals(expected, url.toString());
 	}
 
@@ -69,7 +69,7 @@ public class OAuthValidationFilterTest extends OAuthValidationFilter
 		};
 		final String expected = "https://www.example.com/test";
 		
-		final StringBuilder url = parseRequestUrl(input);
+		final StringBuilder url = OpenSocialRequestValidator.parseRequestUrl(input);
 		Assert.assertEquals(expected, url.toString());
 	}
 
@@ -85,7 +85,7 @@ public class OAuthValidationFilterTest extends OAuthValidationFilter
 		};
 		final String expected = "https://www.example.com/test";
 		
-		final StringBuilder url = parseRequestUrl(input);
+		final StringBuilder url = OpenSocialRequestValidator.parseRequestUrl(input);
 		Assert.assertEquals(expected, url.toString());
 	}
 
@@ -101,7 +101,7 @@ public class OAuthValidationFilterTest extends OAuthValidationFilter
 		};
 		final String expected = "https://www.example.com:8443/test";
 		
-		final StringBuilder url = parseRequestUrl(input);
+		final StringBuilder url = OpenSocialRequestValidator.parseRequestUrl(input);
 		Assert.assertEquals(expected, url.toString());
 	}
 
