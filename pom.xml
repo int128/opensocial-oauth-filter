@@ -48,13 +48,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.oauth</groupId>
-			<artifactId>oauth-core</artifactId>
-			<version>20090105</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/webapp/WEB-INF/lib/oauth-core-20090105.jar</systemPath>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.7</version>
