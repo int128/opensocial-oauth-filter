@@ -32,8 +32,8 @@
 						<headerDefinition>src/misc/header.xml</headerDefinition>
 					</headerDefinitions>
 					<includes>
-						<include>src/main/*.java</include>
-						<include>src/test/*.java</include>
+						<include>src/main/**/*.java</include>
+						<include>src/test/**/*.java</include>
 					</includes>
 				</configuration>
 			</plugin>
