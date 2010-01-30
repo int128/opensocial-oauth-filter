@@ -29,11 +29,21 @@ public class OpenSocialRequest
 	private final String appId;
 	private final String appUrl;
 
-	public OpenSocialRequest(OAuthMessage message, HttpServletRequest request)
+	public OpenSocialRequest(OAuthMessage message, HttpServletRequest request) throws OpenSocialException
 	{
 		oauthMessage = message;
 		appId = request.getParameter(OPENSOCIAL_APP_ID);
 		appUrl = request.getParameter(OPENSOCIAL_APP_URL);
+		
+		// check null
+		if(appId == null) {
+			throw new OpenSocialException(
+				"Parameter " + OpenSocialRequest.OPENSOCIAL_APP_ID + " not exist");
+		}
+		if(appUrl == null) {
+			throw new OpenSocialException(
+				"Parameter " + OpenSocialRequest.OPENSOCIAL_APP_URL + " not exist");
+		}
 	}
 
 	public final OAuthMessage getOAuthMessage()

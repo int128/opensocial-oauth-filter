@@ -20,7 +20,7 @@ import java.util.List;
 import javax.servlet.FilterConfig;
 
 import org.hidetake.util.oauth.ValidationEventListener;
-import org.hidetake.util.oauth.model.OpenSocialAccessor;
+import org.hidetake.util.oauth.model.OpenSocialApp;
 
 /**
  * Servlet filter initialization context.
@@ -33,7 +33,7 @@ public interface InitContext
 
 	public FilterConfig getFilterConfig();
 	
-	public OpenSocialAccessor getOpenSocialAccessor();
+	public OpenSocialApp getOpenSocialAccessor();
 	
 	public List<ValidationEventListener> getValidationEventListeners();
 

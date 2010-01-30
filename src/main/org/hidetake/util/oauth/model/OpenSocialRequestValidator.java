@@ -23,6 +23,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hidetake.util.oauth.config.AppRegistry;
+
 
 import net.oauth.OAuth;
 import net.oauth.OAuthException;
@@ -32,49 +34,69 @@ import net.oauth.SimpleOAuthValidator;
 public class OpenSocialRequestValidator
 {
 
-	private final OpenSocialAccessor openSocialAccessor;
+	private final AppRegistry appRegistry;
 	private final OAuthValidator oauthValidator = new SimpleOAuthValidator();
+	private final boolean singleMode;
 
-	public OpenSocialRequestValidator(OpenSocialAccessor anOpenSocialAccessor)
+	public OpenSocialRequestValidator(AppRegistry appRegistry)
 	{
-		openSocialAccessor = anOpenSocialAccessor;
+		if(appRegistry.getList().size() == 0) {
+			throw new IllegalArgumentException("No registered opensocial-app found");
+		}
+		this.appRegistry = appRegistry;
+		this.singleMode = (appRegistry.getList().size() == 1);
 	}
 
-	public final OpenSocialAccessor getOpenSocialAccessor()
+	public void validate(OpenSocialRequest openSocialRequest) throws OpenSocialException
 	{
-		return openSocialAccessor;
-	}
-	
-	public void validate(OpenSocialRequest openSocialRequest)
-	throws OAuthException, OpenSocialException, IOException
-	{
-		// validate signature
-		try {
-			oauthValidator.validateMessage(
-				openSocialRequest.getOAuthMessage(), openSocialAccessor.getOAuthAccessor());
-		}
-		catch (URISyntaxException e) {
-			throw new OAuthException(e);
-		}
-		
-		// validate application id
-		if(openSocialRequest.getAppId() == null) {
-			throw new OpenSocialException("Parameter " + OpenSocialRequest.OPENSOCIAL_APP_ID + " not exist");
-		}
-		else if(openSocialRequest.getAppId().equals(openSocialAccessor.getAppId())) {
+		if(singleMode) {
+			validateSingle(openSocialRequest, appRegistry.getList().get(0));
 		}
 		else {
-			throw new OpenSocialException("Invalid appId: " + openSocialRequest.getAppId());
+			for(OpenSocialApp app : appRegistry.getList()) {
+				try {
+					validateSingle(openSocialRequest, app);
+				}
+				catch(OpenSocialException e) {
+					continue;
+				}
+				
+				// success
+				return;
+			}
+			
+			throw new OpenSocialException("No suitable opensocial-app found");
+		}
+	}
+
+	private void validateSingle(OpenSocialRequest openSocialRequest, OpenSocialApp app)
+	throws OpenSocialException
+	{
+		// validate application id
+		if(!openSocialRequest.getAppId().equals(app.getAppId())) {
+			throw new OpenSocialException(
+				"Invalid " + OpenSocialRequest.OPENSOCIAL_APP_ID + ": " + openSocialRequest.getAppId());
 		}
 		
 		// validate application URL
-		if(openSocialRequest.getAppUrl() == null) {
-			throw new OpenSocialException("Parameter " + OpenSocialRequest.OPENSOCIAL_APP_URL + " not exist");
+		if(!openSocialRequest.getAppUrl().equals(app.getAppUrl())) {
+			throw new OpenSocialException(
+				"Invalid " + OpenSocialRequest.OPENSOCIAL_APP_URL + ": " + openSocialRequest.getAppUrl());
 		}
-		if(openSocialRequest.getAppUrl().equals(openSocialAccessor.getAppUrl())) {
+		
+		// validate signature
+		try {
+			oauthValidator.validateMessage(
+				openSocialRequest.getOAuthMessage(), app.getOAuthAccessor());
 		}
-		else {
-			throw new OpenSocialException("Invalid appUrl: " + openSocialRequest.getAppUrl());
+		catch (URISyntaxException e) {
+			throw new OpenSocialException(e);
+		}
+		catch (OAuthException e) {
+			throw new OpenSocialException(e);
+		}
+		catch (IOException e) {
+			throw new OpenSocialException(e);
 		}
 	}
 

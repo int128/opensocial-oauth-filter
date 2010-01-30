@@ -20,27 +20,27 @@ package org.hidetake.util.oauth.config;
  * @author hidetake.org
  *
  */
-public class OpenSocialAccessorConfigurationException extends Exception
+public class ConfigurationException extends Exception
 {
 	
 	private static final long serialVersionUID = 1L;
 
-	public OpenSocialAccessorConfigurationException()
+	public ConfigurationException()
 	{
 		super();
 	}
 
-	public OpenSocialAccessorConfigurationException(String arg0, Throwable arg1)
+	public ConfigurationException(String arg0, Throwable arg1)
 	{
 		super(arg0, arg1);
 	}
 
-	public OpenSocialAccessorConfigurationException(String arg0)
+	public ConfigurationException(String arg0)
 	{
 		super(arg0);
 	}
 
-	public OpenSocialAccessorConfigurationException(Throwable arg0)
+	public ConfigurationException(Throwable arg0)
 	{
 		super(arg0);
 	}

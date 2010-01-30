@@ -15,24 +15,18 @@
  */
 package org.hidetake.util.oauth.config;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import javax.xml.xpath.XPathVariableResolver;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 /**
  * XPath wrapper class.
@@ -43,22 +37,33 @@ import org.xml.sax.SAXException;
 public class XPathEvaluator
 {
 
-	private final Document document;
+	private final Node targetNode;
 	private final XPath xpath;
 
-	public XPathEvaluator(InputStream stream)
-	throws SAXException, IOException, ParserConfigurationException
+	public static final XPath createXPath()
 	{
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		//factory.setNamespaceAware(true);
-		document = factory.newDocumentBuilder().parse(stream);
-		xpath = XPathFactory.newInstance().newXPath();
+		return XPathFactory.newInstance().newXPath();
+	}
+	
+	public XPathEvaluator(Node targetNode)
+	{
+		this(targetNode, createXPath());
+	}
+	
+	public XPathEvaluator(Node targetNode, XPath xpath)
+	{
+		this.targetNode = targetNode;
+		this.xpath = xpath;
 	}
 
-	public Iterable<Node> getNodeList(String expression)
+	public Iterable<Node> getNodeList(String expression) throws NoSuchNodeException
 	{
 		try {
-			final NodeList nodeList = (NodeList) xpath.evaluate(expression, document, XPathConstants.NODESET);
+			final NodeList nodeList = (NodeList) xpath.evaluate(expression, targetNode, XPathConstants.NODESET);
+			if(nodeList.getLength() == 0) {
+				throw new NoSuchNodeException(expression);
+			}
+			
 			return new Iterable<Node>()
 			{
 				public Iterator<Node> iterator()
@@ -90,10 +95,14 @@ public class XPathEvaluator
 		}
 	}
 
-	public Iterable<String> getNodeValueList(String expression)
+	public Iterable<String> getNodeValueList(String expression) throws NoSuchNodeException
 	{
 		try {
-			final NodeList nodeList = (NodeList) xpath.evaluate(expression, document, XPathConstants.NODESET);
+			final NodeList nodeList = (NodeList) xpath.evaluate(expression, targetNode, XPathConstants.NODESET);
+			if(nodeList.getLength() == 0) {
+				throw new NoSuchNodeException(expression);
+			}
+			
 			return new Iterable<String>()
 			{
 				public Iterator<String> iterator()
@@ -125,14 +134,23 @@ public class XPathEvaluator
 		}
 	}
 
-	public String getString(String expression)
+	public Node getNode(String expression) throws NoSuchNodeException
 	{
 		try {
-			return (String) xpath.evaluate(expression, document, XPathConstants.STRING);
+			Node node = (Node) xpath.evaluate(expression, targetNode, XPathConstants.NODE);
+			if(node == null) {
+				throw new NoSuchNodeException(expression);
+			}
+			return node;
 		}
 		catch (XPathExpressionException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public String getString(String expression) throws NoSuchNodeException
+	{
+		return getNode(expression).getNodeValue();
 	}
 
 	public void setVariable(final Map<QName, Object> variableMap)

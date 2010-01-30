@@ -48,7 +48,7 @@
     <xsd:element name="opensocial-apps">
     	<xsd:complexType>
     		<xsd:sequence>
-    			<xsd:element name="opensocial-app" maxOccurs="1" minOccurs="1"><xsd:complexType>
+    			<xsd:element name="opensocial-app" maxOccurs="unbounded" minOccurs="1"><xsd:complexType>
     		<xsd:attribute name="app-id" type="xsd:string"></xsd:attribute>
     		<xsd:attribute name="app-url" type="xsd:anyURI"></xsd:attribute>
     		<xsd:attribute name="container-id" type="xsd:IDREF"></xsd:attribute>

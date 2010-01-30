@@ -17,14 +17,14 @@ package org.hidetake.util.oauth.model;
 
 import net.oauth.OAuthAccessor;
 
-public class OpenSocialAccessor
+public class OpenSocialApp
 {
 
 	private final String appId;
 	private final String appUrl;
 	private final OAuthAccessor oauthAccessor;
 	
-	public OpenSocialAccessor(String appId, String appUrl, OAuthAccessor oauthAccessor)
+	public OpenSocialApp(String appId, String appUrl, OAuthAccessor oauthAccessor)
 	{
 		this.appId = appId;
 		this.appUrl = appUrl;

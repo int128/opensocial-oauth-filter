@@ -24,29 +24,31 @@ import net.oauth.OAuthAccessor;
 import net.oauth.signature.RSA_SHA1;
 
 import org.hidetake.util.oauth.ValidationEventListener;
-import org.hidetake.util.oauth.config.OpenSocialAccessorFactory;
-import org.hidetake.util.oauth.model.OpenSocialAccessor;
+import org.hidetake.util.oauth.config.AppRegistry;
+import org.hidetake.util.oauth.config.AppRegistryFactory;
+import org.hidetake.util.oauth.config.ConfigurationException;
+import org.hidetake.util.oauth.model.OpenSocialApp;
 import org.junit.Assert;
 import org.junit.Test;
 
 
-public class OpenSocialAccessorFactoryTest
+public class AppRegistryFactoryTest
 {
 
-	private static final String config1 = "config1.xml";
-	
+	//TODO
 	@Test
 	public void testListeners1() throws Exception
 	{
-		final InputStream stream = OpenSocialAccessorFactoryTest.class.getResourceAsStream(config1);
-		final OpenSocialAccessorFactory config = new OpenSocialAccessorFactory(stream);
+		final InputStream stream = AppRegistryFactoryTest.class.getResourceAsStream("config1.xml");
+		final AppRegistryFactory factory = new AppRegistryFactory();
 		
 		final Set<String> expects = new HashSet<String>();
 		expects.add("org.hidetake.util.oauth.listener.ValidationEventLogger");
 		expects.add("org.hidetake.util.oauth.listener.AllowLocalhost");
 		
 		final Set<String> actuals = new HashSet<String>();
-		final List<ValidationEventListener> validationEventListeners = config.getValidationEventListeners();
+		final List<ValidationEventListener> validationEventListeners =
+			factory.getValidationEventListeners(stream);
 		for(ValidationEventListener listener : validationEventListeners) {
 			actuals.add(listener.getClass().getName());
 		}
@@ -57,16 +59,35 @@ public class OpenSocialAccessorFactoryTest
 	@Test
 	public void testApp1() throws Exception
 	{
-		final InputStream stream = OpenSocialAccessorFactoryTest.class.getResourceAsStream(config1);
-		final OpenSocialAccessorFactory config = new OpenSocialAccessorFactory(stream);
+		final InputStream stream = AppRegistryFactoryTest.class.getResourceAsStream("config1.xml");
+		final AppRegistryFactory factory = new AppRegistryFactory();
+		final AppRegistry registry = factory.create(stream);
 		
-		final OpenSocialAccessor openSocialAccessor = config.getOpenSocialAccessor();
-		Assert.assertEquals("test", openSocialAccessor.getAppId());
-		Assert.assertEquals("http://www.example.com/apps/test", openSocialAccessor.getAppUrl());
+		final OpenSocialApp openSocialApp = registry.getList().get(0);
+		Assert.assertEquals("test", openSocialApp.getAppId());
+		Assert.assertEquals("http://www.example.com/apps/test", openSocialApp.getAppUrl());
 		
-		final OAuthAccessor oauthAccessor = openSocialAccessor.getOAuthAccessor();
+		final OAuthAccessor oauthAccessor = openSocialApp.getOAuthAccessor();
 		Assert.assertEquals("mixi.jp", oauthAccessor.consumer.consumerKey);
 		System.out.println(oauthAccessor.consumer.getProperty(RSA_SHA1.X509_CERTIFICATE));
+	}
+
+	@Test(expected = ConfigurationException.class)
+	public void testApp2() throws Exception
+	{
+		final InputStream stream = AppRegistryFactoryTest.class.getResourceAsStream("config2.xml");
+		final AppRegistryFactory factory = new AppRegistryFactory();
+		
+		factory.create(stream);
+	}
+
+	@Test(expected = ConfigurationException.class)
+	public void testApp3() throws Exception
+	{
+		final InputStream stream = AppRegistryFactoryTest.class.getResourceAsStream("config3.xml");
+		final AppRegistryFactory factory = new AppRegistryFactory();
+		
+		factory.create(stream);
 	}
 
 }

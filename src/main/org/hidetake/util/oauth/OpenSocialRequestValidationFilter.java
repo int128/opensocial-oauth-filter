@@ -15,10 +15,8 @@
  */
 package org.hidetake.util.oauth;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.Filter;
@@ -30,13 +28,13 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.oauth.OAuthException;
 import net.oauth.OAuthMessage;
 
+import org.hidetake.util.oauth.config.AppRegistry;
+import org.hidetake.util.oauth.config.AppRegistryFactory;
+import org.hidetake.util.oauth.config.ConfigurationException;
 import org.hidetake.util.oauth.config.InitContext;
-import org.hidetake.util.oauth.config.OpenSocialAccessorConfigurationException;
-import org.hidetake.util.oauth.config.OpenSocialAccessorFactory;
-import org.hidetake.util.oauth.model.OpenSocialAccessor;
+import org.hidetake.util.oauth.model.OpenSocialApp;
 import org.hidetake.util.oauth.model.OpenSocialException;
 import org.hidetake.util.oauth.model.OpenSocialRequest;
 import org.hidetake.util.oauth.model.OpenSocialRequestValidator;
@@ -73,13 +71,13 @@ public class OpenSocialRequestValidationFilter implements Filter
 			
 			// load configuration
 			String realPath = filterConfig.getServletContext().getRealPath(configPath);
-			InputStream configStream = new FileInputStream(realPath);
+
+			// create an app registry
+			AppRegistryFactory appRegistryFactory = new AppRegistryFactory();
+			final AppRegistry registry = appRegistryFactory.create(realPath);
 			
-			OpenSocialAccessorFactory openSocialAccessorFactory = new OpenSocialAccessorFactory(configStream);
-			final OpenSocialAccessor accessor = openSocialAccessorFactory.getOpenSocialAccessor();
-			
-			validator = new OpenSocialRequestValidator(accessor);
-			validationEventListeners = openSocialAccessorFactory.getValidationEventListeners();
+			validator = new OpenSocialRequestValidator(registry);
+			validationEventListeners = appRegistryFactory.getValidationEventListeners(realPath);
 			
 			// notify initialization
 			InitContext context = new InitContext()
@@ -89,9 +87,10 @@ public class OpenSocialRequestValidationFilter implements Filter
 					return validationEventListeners;
 				}
 				
-				public OpenSocialAccessor getOpenSocialAccessor()
+				public OpenSocialApp getOpenSocialAccessor()
 				{
-					return accessor;
+					//FIXME:
+					return registry.getList().get(0);
 				}
 				
 				public FilterConfig getFilterConfig()
@@ -104,10 +103,10 @@ public class OpenSocialRequestValidationFilter implements Filter
 				eventListener.init(context);
 			}
 		}
-		catch (FileNotFoundException e) {
+		catch (ConfigurationException e) {
 			throw new ServletException(e);
 		}
-		catch (OpenSocialAccessorConfigurationException e) {
+		catch (FileNotFoundException e) {
 			throw new ServletException(e);
 		}
 	}
@@ -152,16 +151,16 @@ public class OpenSocialRequestValidationFilter implements Filter
 			// call next filter
 			chain.doFilter(request, response);
 		}
-		catch (OAuthException e) {
-			boolean sent = false;
-			for(ValidationEventListener eventListener : validationEventListeners) {
-				sent |= eventListener.onOAuthException(request, response, e);
-			}
-			if(!sent) {
-				// default behavior
-				response.sendError(HttpServletResponse.SC_FORBIDDEN);
-			}
-		}
+//		catch (OAuthException e) {
+//			boolean sent = false;
+//			for(ValidationEventListener eventListener : validationEventListeners) {
+//				sent |= eventListener.onOAuthException(request, response, e);
+//			}
+//			if(!sent) {
+//				// default behavior
+//				response.sendError(HttpServletResponse.SC_FORBIDDEN);
+//			}
+//		}
 		catch (OpenSocialException e) {
 			boolean sent = false;
 			for(ValidationEventListener eventListener : validationEventListeners) {
