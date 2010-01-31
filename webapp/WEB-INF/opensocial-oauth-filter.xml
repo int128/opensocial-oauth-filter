@@ -3,11 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.hidetake.org/opensocial-oauth-filter opensocial-oauth-filter.xsd">
 
-	<features>
-		<feature id="org.hidetake.util.oauth.listener.ValidationEventLogger" />
-		<feature id="org.hidetake.util.oauth.listener.AllowLocalhost" />
-		<feature id="org.hidetake.util.oauth.listener.ReverseProxyURLManipulator" />
-	</features>
+	<extensions>
+		<extension id="org.hidetake.util.oauth.extension.ValidationEventLogger" />
+		<extension id="org.hidetake.util.oauth.extension.AllowLocalhost" />
+		<extension id="org.hidetake.util.oauth.extension.ReverseProxyURLManipulator" />
+	</extensions>
 
 	<opensocial-apps>
 		<opensocial-app
