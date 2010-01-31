@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hidetake.util.oauth.test.listener;
+package org.hidetake.util.oauth.test.extension;
 
 import javax.servlet.http.HttpServletRequest;
 
 import junit.framework.Assert;
 
-import org.hidetake.util.oauth.listener.ReverseProxyURLManipulator;
+import org.hidetake.util.oauth.extension.ReverseProxyHost;
 import org.hidetake.util.oauth.test.HttpServletRequestStub;
 import org.junit.Test;
 
-public class ReverseProxyURLManipulatorTest extends ReverseProxyURLManipulator
+public class ReverseProxyURLManipulatorTest extends ReverseProxyHost
 {
 
 	@Test
@@ -42,7 +42,7 @@ public class ReverseProxyURLManipulatorTest extends ReverseProxyURLManipulator
 		};
 		final String expected = "http://www.example.com/test";
 		
-		manipulateURL(input, context);
+		postprocess(input, context);
 		Assert.assertEquals(expected, input.toString());
 	}
 
@@ -59,7 +59,7 @@ public class ReverseProxyURLManipulatorTest extends ReverseProxyURLManipulator
 		};
 		final String expected = "http://proxy/test";
 		
-		manipulateURL(input, context);
+		postprocess(input, context);
 		Assert.assertEquals(expected, input.toString());
 	}
 

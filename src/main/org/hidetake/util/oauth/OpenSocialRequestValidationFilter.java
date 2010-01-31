@@ -15,9 +15,9 @@
  */
 package org.hidetake.util.oauth;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -28,13 +28,13 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.oauth.OAuthMessage;
-
 import org.hidetake.util.oauth.config.AppRegistry;
 import org.hidetake.util.oauth.config.AppRegistryFactory;
 import org.hidetake.util.oauth.config.ConfigurationException;
-import org.hidetake.util.oauth.config.InitContext;
-import org.hidetake.util.oauth.model.OpenSocialApp;
+import org.hidetake.util.oauth.config.ExtensionRegistryManager;
+import org.hidetake.util.oauth.extensionpoint.AccessControl;
+import org.hidetake.util.oauth.extensionpoint.FilterInitializing;
+import org.hidetake.util.oauth.extensionpoint.Validation;
 import org.hidetake.util.oauth.model.OpenSocialException;
 import org.hidetake.util.oauth.model.OpenSocialRequest;
 import org.hidetake.util.oauth.model.OpenSocialRequestValidator;
@@ -59,9 +59,8 @@ public class OpenSocialRequestValidationFilter implements Filter
 {
 
 	private OpenSocialRequestValidator validator;
-	private List<ValidationEventListener> validationEventListeners;
 
-	public void init(final FilterConfig filterConfig) throws ServletException
+	public void init(FilterConfig filterConfig) throws ServletException
 	{
 		try {
 			String configPath = filterConfig.getInitParameter("config");
@@ -72,35 +71,17 @@ public class OpenSocialRequestValidationFilter implements Filter
 			// load configuration
 			String realPath = filterConfig.getServletContext().getRealPath(configPath);
 
-			// create an app registry
+			// initialize validator
 			AppRegistryFactory appRegistryFactory = new AppRegistryFactory();
-			final AppRegistry registry = appRegistryFactory.create(realPath);
-			
+			AppRegistry registry = appRegistryFactory.create(new FileInputStream(realPath));
 			validator = new OpenSocialRequestValidator(registry);
-			validationEventListeners = appRegistryFactory.getValidationEventListeners(realPath);
 			
-			// notify initialization
-			InitContext context = new InitContext()
-			{
-				public List<ValidationEventListener> getValidationEventListeners()
-				{
-					return validationEventListeners;
-				}
-				
-				public OpenSocialApp getOpenSocialAccessor()
-				{
-					//FIXME:
-					return registry.getList().get(0);
-				}
-				
-				public FilterConfig getFilterConfig()
-				{
-					return filterConfig;
-				}
-			};
+			// register extensions
+			ExtensionRegistryManager.register(new FileInputStream(realPath));
 			
-			for(ValidationEventListener eventListener : validationEventListeners) {
-				eventListener.init(context);
+			for(FilterInitializing extension : ExtensionRegistryManager.get().getExtensions(
+				FilterInitializing.class)) {
+				extension.init(filterConfig, registry);
 			}
 		}
 		catch (ConfigurationException e) {
@@ -117,57 +98,38 @@ public class OpenSocialRequestValidationFilter implements Filter
 		doFilterHttp((HttpServletRequest) req, (HttpServletResponse) res, chain);
 	}
 
-	public void doFilterHttp(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+	private void doFilterHttp(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 	throws IOException, ServletException
 	{
 		try {
 			// is skipping validation?
 			boolean skip = false;
-			for(ValidationEventListener eventListener : validationEventListeners) {
-				skip |= eventListener.isSkippingValidation(request, response);
+			for(AccessControl extension : ExtensionRegistryManager.get().getExtensions(AccessControl.class)) {
+				skip |= extension.skipValidation(request, response);
 			}
 			
 			if(!skip) {
-				// construct message object
-				StringBuilder url = OpenSocialRequestValidator.parseRequestUrl(request);
-				for(ValidationEventListener eventListener : validationEventListeners) {
-					eventListener.manipulateURL(url, request);
-				}
-				OAuthMessage message = new OAuthMessage(request.getMethod(), url.toString(),
-					OpenSocialRequestValidator.parseRequestParameters(request));
-				
 				// construct request object
-				OpenSocialRequest openSocialRequest = new OpenSocialRequest(message, request);
+				OpenSocialRequest openSocialRequest = OpenSocialRequest.create(request);
 				
 				// validate request
 				validator.validate(openSocialRequest);
 				
-				// notify success
-				for(ValidationEventListener eventListener : validationEventListeners) {
-					eventListener.onValidationComplete(response);
+				for(Validation extension : ExtensionRegistryManager.get().getExtensions(Validation.class)) {
+					extension.passed(request, response, openSocialRequest);
 				}
 			}
 			
 			// call next filter
 			chain.doFilter(request, response);
 		}
-//		catch (OAuthException e) {
-//			boolean sent = false;
-//			for(ValidationEventListener eventListener : validationEventListeners) {
-//				sent |= eventListener.onOAuthException(request, response, e);
-//			}
-//			if(!sent) {
-//				// default behavior
-//				response.sendError(HttpServletResponse.SC_FORBIDDEN);
-//			}
-//		}
 		catch (OpenSocialException e) {
-			boolean sent = false;
-			for(ValidationEventListener eventListener : validationEventListeners) {
-				sent |= eventListener.onOpenSocialException(request, response, e);
+			for(Validation extension : ExtensionRegistryManager.get().getExtensions(Validation.class)) {
+				extension.failed(request, response, e);
 			}
-			if(!sent) {
-				// default behavior
+			
+			// default behavior
+			if(!response.isCommitted()) {
 				response.sendError(HttpServletResponse.SC_FORBIDDEN);
 			}
 		}

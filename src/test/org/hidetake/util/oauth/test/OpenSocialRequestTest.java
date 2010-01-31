@@ -17,13 +17,13 @@ package org.hidetake.util.oauth.test;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hidetake.util.oauth.model.OpenSocialRequestValidator;
+import org.hidetake.util.oauth.model.OpenSocialRequest;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class OpenSocialRequestValidatorTest
+public class OpenSocialRequestTest
 {
-
+	
 	@Test
 	public void testParseRequestUrl1()
 	{
@@ -36,7 +36,7 @@ public class OpenSocialRequestValidatorTest
 		};
 		final String expected = "http://www.example.com/test";
 		
-		final StringBuilder url = OpenSocialRequestValidator.parseRequestUrl(input);
+		final StringBuilder url = OpenSocialRequest.parseRequestUrl(input);
 		Assert.assertEquals(expected, url.toString());
 	}
 
@@ -52,7 +52,7 @@ public class OpenSocialRequestValidatorTest
 		};
 		final String expected = "http://www.example.com/test";
 		
-		final StringBuilder url = OpenSocialRequestValidator.parseRequestUrl(input);
+		final StringBuilder url = OpenSocialRequest.parseRequestUrl(input);
 		Assert.assertEquals(expected, url.toString());
 	}
 
@@ -68,7 +68,7 @@ public class OpenSocialRequestValidatorTest
 		};
 		final String expected = "http://www.example.com:8080/test";
 		
-		final StringBuilder url = OpenSocialRequestValidator.parseRequestUrl(input);
+		final StringBuilder url = OpenSocialRequest.parseRequestUrl(input);
 		Assert.assertEquals(expected, url.toString());
 	}
 
@@ -84,7 +84,7 @@ public class OpenSocialRequestValidatorTest
 		};
 		final String expected = "https://www.example.com/test";
 		
-		final StringBuilder url = OpenSocialRequestValidator.parseRequestUrl(input);
+		final StringBuilder url = OpenSocialRequest.parseRequestUrl(input);
 		Assert.assertEquals(expected, url.toString());
 	}
 
@@ -100,7 +100,7 @@ public class OpenSocialRequestValidatorTest
 		};
 		final String expected = "https://www.example.com/test";
 		
-		final StringBuilder url = OpenSocialRequestValidator.parseRequestUrl(input);
+		final StringBuilder url = OpenSocialRequest.parseRequestUrl(input);
 		Assert.assertEquals(expected, url.toString());
 	}
 
@@ -116,7 +116,7 @@ public class OpenSocialRequestValidatorTest
 		};
 		final String expected = "https://www.example.com:8443/test";
 		
-		final StringBuilder url = OpenSocialRequestValidator.parseRequestUrl(input);
+		final StringBuilder url = OpenSocialRequest.parseRequestUrl(input);
 		Assert.assertEquals(expected, url.toString());
 	}
 

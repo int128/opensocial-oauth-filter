@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://xmlns.hidetake.org/opensocial-oauth-filter opensocial-oauth-filter.xsd">
 
 	<extensions>
-		<extension id="org.hidetake.util.oauth.extension.ValidationEventLogger" />
+		<extension id="org.hidetake.util.oauth.extension.ValidationLogger" />
 		<extension id="org.hidetake.util.oauth.extension.AllowLocalhost" />
 	</extensions>
 

@@ -17,16 +17,11 @@ package org.hidetake.util.oauth.model;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.hidetake.util.oauth.config.AppRegistry;
 
 
-import net.oauth.OAuth;
 import net.oauth.OAuthException;
 import net.oauth.OAuthValidator;
 import net.oauth.SimpleOAuthValidator;
@@ -58,6 +53,7 @@ public class OpenSocialRequestValidator
 					validateSingle(openSocialRequest, app);
 				}
 				catch(OpenSocialException e) {
+					// try next candidate
 					continue;
 				}
 				
@@ -98,60 +94,6 @@ public class OpenSocialRequestValidator
 		catch (IOException e) {
 			throw new OpenSocialException(e);
 		}
-	}
-
-	/**
-	* Constructs and returns a List of OAuth.Parameter objects, one per
-	* parameter in the passed request.
-	* 
-	* @param  request Servlet request object with methods for retrieving the
-	*         full set of parameters passed with the request
-	* @see    http://wiki.opensocial.org/index.php?title=Validating_Signed_Requests
-	*/
-	public static final List<OAuth.Parameter> parseRequestParameters(HttpServletRequest request)
-	{
-		List<OAuth.Parameter> parameters = new ArrayList<OAuth.Parameter>();
-	
-		for (Object e : request.getParameterMap().entrySet()) {
-			@SuppressWarnings("unchecked")
-			Map.Entry<String, String[]> entry = (Map.Entry<String, String[]>) e;
-	
-			for (String value : entry.getValue()) {
-				parameters.add(new OAuth.Parameter(entry.getKey(), value));
-			}
-		}
-	
-		return parameters;
-	}
-
-	/**
-	 * Constructs and returns the full URL associated with the passed request
-	 * object.
-	 * 
-	 * @param  request Servlet request object with methods for retrieving the
-	 *         various components of the request URL
-	 * @see    http://wiki.opensocial.org/index.php?title=Validating_Signed_Requests
-	 */
-	public static final StringBuilder parseRequestUrl(HttpServletRequest request)
-	{
-		StringBuilder url = new StringBuilder();
-	
-		String scheme = request.getScheme();
-		url.append(scheme);
-		url.append("://");
-		url.append(request.getServerName());
-		
-		int port = request.getLocalPort();
-		if (port == 0) {
-			//nothing
-		}
-		else if ((scheme.equals("http") && port != 80)||(scheme.equals("https") && port != 443)) {
-			url.append(":");
-			url.append(port);
-		}
-		url.append(request.getRequestURI());
-		
-		return url;
 	}
 
 }

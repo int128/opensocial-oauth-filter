@@ -15,13 +15,9 @@
  */
 package org.hidetake.util.oauth.config;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
@@ -32,7 +28,6 @@ import javax.xml.xpath.XPath;
 import net.oauth.OAuthAccessor;
 import net.oauth.OAuthConsumer;
 
-import org.hidetake.util.oauth.ValidationEventListener;
 import org.hidetake.util.oauth.model.OpenSocialApp;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -51,12 +46,6 @@ public class AppRegistryFactory
 	
 	public AppRegistryFactory()
 	{
-	}
-
-	public AppRegistry create(String path) throws ConfigurationException, FileNotFoundException
-	{
-		InputStream configStream = new FileInputStream(path);
-		return create(configStream);
 	}
 	
 	public AppRegistry create(InputStream configStream) throws ConfigurationException
@@ -142,64 +131,6 @@ public class AppRegistryFactory
 		consumer.setProperty(signatureMethod + ".X509Certificate", cert);
 		OAuthAccessor oauthAccessor = new OAuthAccessor(consumer);
 		return oauthAccessor;
-	}
-
-	//TODO: separate
-	@Deprecated
-	public List<ValidationEventListener> getValidationEventListeners(String path)
-	throws ConfigurationException, FileNotFoundException
-	{
-		InputStream configStream = new FileInputStream(path);
-		return getValidationEventListeners(configStream);
-	}
-	
-	//TODO: separate
-	@Deprecated
-	public List<ValidationEventListener> getValidationEventListeners(InputStream configStream)
-	throws ConfigurationException
-	{
-		XPathEvaluator rootEvaluator;
-		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			//factory.setNamespaceAware(true);
-			Document xml = factory.newDocumentBuilder().parse(configStream);
-			
-			rootEvaluator = new XPathEvaluator(xml, xpath);
-		}
-		catch (SAXException e) {
-			throw new ConfigurationException(e);
-		}
-		catch (IOException e) {
-			throw new ConfigurationException(e);
-		}
-		catch (ParserConfigurationException e) {
-			throw new ConfigurationException(e);
-		}
-		
-		try {
-			List<ValidationEventListener> result = new ArrayList<ValidationEventListener>();
-			
-			for(String id : rootEvaluator.getNodeValueList("/config/features/feature/@id")) {
-				try {
-					ValidationEventListener eventListener = (ValidationEventListener) Class.forName(id).newInstance();
-					result.add(eventListener);
-				}
-				catch (InstantiationException e) {
-					throw new ConfigurationException(e);
-				}
-				catch (IllegalAccessException e) {
-					throw new ConfigurationException(e);
-				}
-				catch (ClassNotFoundException e) {
-					throw new ConfigurationException(e);
-				}
-			}
-			
-			return result;
-		}
-		catch (NoSuchNodeException e) {
-			throw new ConfigurationException(e);
-		}
 	}
 
 }

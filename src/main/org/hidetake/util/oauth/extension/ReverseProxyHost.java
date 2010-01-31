@@ -13,20 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hidetake.util.oauth.listener;
+package org.hidetake.util.oauth.extension;
 
 
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import net.oauth.OAuthException;
-
-import org.hidetake.util.oauth.ValidationEventListener;
-import org.hidetake.util.oauth.config.InitContext;
-import org.hidetake.util.oauth.model.OpenSocialException;
+import org.hidetake.util.oauth.extensionpoint.RequestURL;
 
 /**
  * 
@@ -35,20 +27,14 @@ import org.hidetake.util.oauth.model.OpenSocialException;
  * @author hidetake.org
  *
  */
-public class ReverseProxyURLManipulator implements ValidationEventListener
+public class ReverseProxyHost implements RequestURL
 {
 
-	public void init(InitContext context)
-	throws ServletException
+	public void preprocess(HttpServletRequest request)
 	{
-	}
-	
-	public boolean isSkippingValidation(ServletRequest req, ServletResponse res)
-	{
-		return false;
 	}
 
-	public void manipulateURL(StringBuilder url, HttpServletRequest request)
+	public void postprocess(StringBuilder url, HttpServletRequest request)
 	{
 		// look up X-Forwarded-Host header
 		String forwardedHost = request.getHeader("X-Forwarded-Host");
@@ -70,20 +56,6 @@ public class ReverseProxyURLManipulator implements ValidationEventListener
 			url.append(forwardedHost);
 			url.append(lastPart);
 		}
-	}
-
-	public boolean onOAuthException(HttpServletRequest request, HttpServletResponse response, OAuthException e)
-	{
-		return false;
-	}
-
-	public boolean onOpenSocialException(HttpServletRequest request, HttpServletResponse response, OpenSocialException e)
-	{
-		return false;
-	}
-
-	public void onValidationComplete(HttpServletResponse response)
-	{
 	}
 
 }
