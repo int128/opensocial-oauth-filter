@@ -17,8 +17,10 @@ package org.hidetake.util.oauth.config;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.hidetake.util.oauth.extensionpoint.ExtensionPoint;
 
@@ -60,9 +62,9 @@ public class ExtensionRegistry
 		return list;
 	}
 
-	public List<ExtensionPoint> getAllExtensions()
+	public Set<ExtensionPoint> getAllExtensions()
 	{
-		List<ExtensionPoint> result = new ArrayList<ExtensionPoint>();
+		Set<ExtensionPoint> result = new HashSet<ExtensionPoint>();
 		for(List<? extends ExtensionPoint> list : map.values()) {
 			result.addAll(list);
 		}
