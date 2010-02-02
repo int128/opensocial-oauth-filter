@@ -112,7 +112,7 @@ public class OpenSocialRequestValidationFilter implements Filter
 			throw new ServletException(e);
 		}
 		
-		// notify extensions
+		// notify init()
 		for(FilterInitializing extension : extensionRegistry.getExtensions(FilterInitializing.class)) {
 			extension.init(filterConfig, validator, extensionRegistry);
 		}
@@ -128,7 +128,7 @@ public class OpenSocialRequestValidationFilter implements Filter
 	throws IOException, ServletException
 	{
 		try {
-			// is skipping validation?
+			// skips validation?
 			boolean skip = false;
 			for(AccessControl extension : extensionRegistry.getExtensions(AccessControl.class)) {
 				skip |= extension.skipValidation(request, response);
