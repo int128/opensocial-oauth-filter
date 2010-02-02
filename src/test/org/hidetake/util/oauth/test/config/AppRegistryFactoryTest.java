@@ -17,6 +17,8 @@ package org.hidetake.util.oauth.test.config;
 
 import java.io.InputStream;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import net.oauth.OAuthAccessor;
 import net.oauth.signature.RSA_SHA1;
 
@@ -26,6 +28,7 @@ import org.hidetake.util.oauth.config.ConfigurationException;
 import org.hidetake.util.oauth.model.OpenSocialApp;
 import org.junit.Assert;
 import org.junit.Test;
+import org.w3c.dom.Document;
 
 
 public class AppRegistryFactoryTest
@@ -35,8 +38,11 @@ public class AppRegistryFactoryTest
 	public void testApp1() throws Exception
 	{
 		final InputStream stream = AppRegistryFactoryTest.class.getResourceAsStream("config1.xml");
+		final DocumentBuilderFactory df = DocumentBuilderFactory.newInstance();
+		final Document xml = df.newDocumentBuilder().parse(stream);
+
 		final AppRegistryFactory factory = new AppRegistryFactory();
-		final AppRegistry registry = factory.create(stream);
+		final AppRegistry registry = factory.create(xml);
 		
 		final OpenSocialApp openSocialApp = registry.getList().get(0);
 		Assert.assertEquals("test", openSocialApp.getAppId());
@@ -51,18 +57,24 @@ public class AppRegistryFactoryTest
 	public void testApp2() throws Exception
 	{
 		final InputStream stream = AppRegistryFactoryTest.class.getResourceAsStream("config2.xml");
+		final DocumentBuilderFactory df = DocumentBuilderFactory.newInstance();
+		final Document xml = df.newDocumentBuilder().parse(stream);
+
 		final AppRegistryFactory factory = new AppRegistryFactory();
 		
-		factory.create(stream);
+		factory.create(xml);
 	}
 
 	@Test(expected = ConfigurationException.class)
 	public void testApp3() throws Exception
 	{
 		final InputStream stream = AppRegistryFactoryTest.class.getResourceAsStream("config3.xml");
+		final DocumentBuilderFactory df = DocumentBuilderFactory.newInstance();
+		final Document xml = df.newDocumentBuilder().parse(stream);
+
 		final AppRegistryFactory factory = new AppRegistryFactory();
 		
-		factory.create(stream);
+		factory.create(xml);
 	}
 
 }

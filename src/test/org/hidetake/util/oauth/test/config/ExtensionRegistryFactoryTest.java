@@ -19,47 +19,41 @@ import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.hidetake.util.oauth.config.ExtensionRegistryManager;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.hidetake.util.oauth.config.ExtensionRegistry;
+import org.hidetake.util.oauth.config.ExtensionRegistryFactory;
 import org.hidetake.util.oauth.extension.AllowLocalhost;
 import org.hidetake.util.oauth.extension.ValidationLogger;
 import org.hidetake.util.oauth.extensionpoint.ExtensionPoint;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
+import org.w3c.dom.Document;
 
 
-public class ExtensionRegistryManagerTest
+public class ExtensionRegistryFactoryTest
 {
-
-	@Before
-	public void before()
-	{
-		ExtensionRegistryManager.get().reset();
-	}
-	
+		
 	@Test
 	public void test1() throws Exception
 	{
-		final InputStream stream = ExtensionRegistryManagerTest.class.getResourceAsStream("config1.xml");
-		ExtensionRegistryManager.register(stream);
+		final InputStream stream = ExtensionRegistryFactoryTest.class.getResourceAsStream("config1.xml");
+		final DocumentBuilderFactory df = DocumentBuilderFactory.newInstance();
+		final Document xml = df.newDocumentBuilder().parse(stream);
+		
+		ExtensionRegistryFactory factory = new ExtensionRegistryFactory();
+		ExtensionRegistry extensionRegistry = factory.create(xml);
 		
 		final Set<String> expects = new HashSet<String>();
 		expects.add(AllowLocalhost.class.getName());
 		expects.add(ValidationLogger.class.getName());
 		
 		final Set<String> actuals = new HashSet<String>();
-		for(ExtensionPoint extensionPoint : ExtensionRegistryManager.get().getAllExtensions()) {
+		for(ExtensionPoint extensionPoint : extensionRegistry.getAllExtensions()) {
 			actuals.add(extensionPoint.getClass().getName());
 		}
 		
 		Assert.assertEquals(expects, actuals);
-	}
-
-	@After
-	public void after()
-	{
-		ExtensionRegistryManager.get().reset();
 	}
 
 }

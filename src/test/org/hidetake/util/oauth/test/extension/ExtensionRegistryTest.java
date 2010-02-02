@@ -15,7 +15,8 @@
  */
 package org.hidetake.util.oauth.test.extension;
 
-import org.hidetake.util.oauth.config.ExtensionRegistryManager;
+import org.hidetake.util.oauth.config.ExtensionRegistry;
+import org.hidetake.util.oauth.config.ExtensionRegistryFactory;
 import org.hidetake.util.oauth.extensionpoint.ExtensionPoint;
 import org.junit.After;
 import org.junit.Assert;
@@ -24,6 +25,8 @@ import org.junit.Test;
 
 public class ExtensionRegistryTest
 {
+	
+	private ExtensionRegistry extensionRegistry;
 	
 	private static interface TestExtensionPoint extends ExtensionPoint
 	{
@@ -88,12 +91,12 @@ public class ExtensionRegistryTest
 	{
 		final String expected = "hage";
 		SingleExtension single = new SingleExtension(expected);
-		ExtensionRegistryManager.get().register(single);
+		extensionRegistry.register(single);
 		
 		//some...
 		
 		for(TestExtensionPoint extension :
-			ExtensionRegistryManager.get().getExtensions(TestExtensionPoint.class)) {
+			extensionRegistry.getExtensions(TestExtensionPoint.class)) {
 			extension.notify(expected);
 		}
 		
@@ -105,17 +108,17 @@ public class ExtensionRegistryTest
 	{
 		final String expected = "hage";
 		MultipleExtension multiple = new MultipleExtension(expected);
-		ExtensionRegistryManager.get().register(multiple);
+		extensionRegistry.register(multiple);
 		
 		//some...
 		
 		for(TestExtensionPoint extension :
-			ExtensionRegistryManager.get().getExtensions(TestExtensionPoint.class)) {
+			extensionRegistry.getExtensions(TestExtensionPoint.class)) {
 			extension.notify(expected);
 		}
 		
 		for(HogeExtensionPoint extension :
-			ExtensionRegistryManager.get().getExtensions(HogeExtensionPoint.class)) {
+			extensionRegistry.getExtensions(HogeExtensionPoint.class)) {
 			extension.hoge(expected);
 		}
 		
@@ -126,13 +129,13 @@ public class ExtensionRegistryTest
 	@Before
 	public void before()
 	{
-		ExtensionRegistryManager.get().reset();
+		extensionRegistry = new ExtensionRegistryFactory().create();
 	}
 
 	@After
 	public void after()
 	{
-		ExtensionRegistryManager.get().reset();
+		extensionRegistry = null;
 	}
 
 }

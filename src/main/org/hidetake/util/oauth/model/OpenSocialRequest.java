@@ -24,9 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import net.oauth.OAuth;
 import net.oauth.OAuthMessage;
 
-import org.hidetake.util.oauth.config.ExtensionRegistryManager;
-import org.hidetake.util.oauth.extensionpoint.RequestURL;
-
 public class OpenSocialRequest
 {
 
@@ -53,15 +50,8 @@ public class OpenSocialRequest
 	public static OpenSocialRequest create(HttpServletRequest request)
 	throws OpenSocialException
 	{
-		StringBuilder url = parseRequestUrl(request);
-		
-		for(RequestURL extension : ExtensionRegistryManager.get().getExtensions(RequestURL.class)) {
-			extension.postprocess(url, request);
-		}
-		
-		OAuthMessage message =
-			new OAuthMessage(request.getMethod(), url.toString(), parseRequestParameters(request));
-		
+		OAuthMessage message = new OAuthMessage(request.getMethod(),
+			parseRequestUrl(request).toString(), parseRequestParameters(request));
 		return create(message, request);
 	}
 

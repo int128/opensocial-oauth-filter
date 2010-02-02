@@ -23,13 +23,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.hidetake.util.oauth.config.AppRegistry;
-import org.hidetake.util.oauth.config.ExtensionRegistryManager;
+import org.hidetake.util.oauth.config.ExtensionRegistry;
 import org.hidetake.util.oauth.extensionpoint.ExtensionPoint;
 import org.hidetake.util.oauth.extensionpoint.FilterInitializing;
 import org.hidetake.util.oauth.extensionpoint.Validation;
 import org.hidetake.util.oauth.model.OpenSocialApp;
 import org.hidetake.util.oauth.model.OpenSocialException;
 import org.hidetake.util.oauth.model.OpenSocialRequest;
+import org.hidetake.util.oauth.model.OpenSocialRequestValidator;
 
 /**
  * 
@@ -42,14 +43,15 @@ public class ValidationLogger implements FilterInitializing, Validation
 {
 	private static final Logger log = Logger.getLogger(ValidationLogger.class.getName());
 
-	public void init(FilterConfig config, AppRegistry appRegistry) throws ServletException
+	public void init(FilterConfig config, OpenSocialRequestValidator validator, ExtensionRegistry extensionRegistry) throws ServletException
 	{
+		AppRegistry appRegistry = validator.getAppRegistry();
 		for(OpenSocialApp app : appRegistry.getList()) {
 			log.info("Registered opensocial-app: id=" + app.getAppId() + ", url=" + app.getAppUrl());
 			log.info("Registered opensocial-container: " + app.getOAuthAccessor().consumer.consumerKey);
 		}
 		
-		for(ExtensionPoint extensionPoint : ExtensionRegistryManager.get().getAllExtensions()) {
+		for(ExtensionPoint extensionPoint : extensionRegistry.getAllExtensions()) {
 			log.info("Registered extension: " + extensionPoint.getClass().getName());
 		}
 	}

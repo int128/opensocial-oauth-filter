@@ -27,6 +27,10 @@ public class ExtensionRegistry
 
 	private final Map<String, List<? extends ExtensionPoint>> map = new HashMap<String, List<? extends ExtensionPoint>>();
 
+	protected ExtensionRegistry()
+	{
+	}
+	
 	public void reset()
 	{
 		map.clear();

@@ -15,14 +15,10 @@
  */
 package org.hidetake.util.oauth.config;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 
 import net.oauth.OAuthAccessor;
@@ -31,7 +27,6 @@ import net.oauth.OAuthConsumer;
 import org.hidetake.util.oauth.model.OpenSocialApp;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
 /**
  * Configuration XML file parser.
@@ -48,28 +43,12 @@ public class AppRegistryFactory
 	{
 	}
 	
-	public AppRegistry create(InputStream configStream) throws ConfigurationException
+	public AppRegistry create(Document xml) throws ConfigurationException
 	{
-		XPathEvaluator rootEvaluator;
-		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			//factory.setNamespaceAware(true);
-			Document xml = factory.newDocumentBuilder().parse(configStream);
-			
-			rootEvaluator = new XPathEvaluator(xml, xpath);
-		}
-		catch (SAXException e) {
-			throw new ConfigurationException(e);
-		}
-		catch (IOException e) {
-			throw new ConfigurationException(e);
-		}
-		catch (ParserConfigurationException e) {
-			throw new ConfigurationException(e);
-		}
+		AppRegistry registry = new AppRegistry();
 		
 		try {
-			AppRegistry registry = new AppRegistry();
+			XPathEvaluator rootEvaluator = new XPathEvaluator(xml, xpath);
 			
 			for(Node appNode : rootEvaluator.getNodeList("/config/opensocial-apps/opensocial-app")) {
 				XPathEvaluator appNodeEvaluator = new XPathEvaluator(appNode, xpath);

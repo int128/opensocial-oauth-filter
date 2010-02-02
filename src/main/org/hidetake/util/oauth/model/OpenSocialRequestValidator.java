@@ -31,7 +31,6 @@ public class OpenSocialRequestValidator
 
 	private final AppRegistry appRegistry;
 	private final OAuthValidator oauthValidator = new SimpleOAuthValidator();
-	private final boolean singleMode;
 
 	public OpenSocialRequestValidator(AppRegistry appRegistry)
 	{
@@ -39,12 +38,16 @@ public class OpenSocialRequestValidator
 			throw new IllegalArgumentException("No registered opensocial-app found");
 		}
 		this.appRegistry = appRegistry;
-		this.singleMode = (appRegistry.getList().size() == 1);
 	}
 
+	public final AppRegistry getAppRegistry()
+	{
+		return appRegistry;
+	}
+	
 	public void validate(OpenSocialRequest openSocialRequest) throws OpenSocialException
 	{
-		if(singleMode) {
+		if(appRegistry.getList().size() == 1) {
 			validateSingle(openSocialRequest, appRegistry.getList().get(0));
 		}
 		else {

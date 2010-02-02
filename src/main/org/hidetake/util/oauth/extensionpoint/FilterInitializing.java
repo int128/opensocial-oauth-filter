@@ -18,11 +18,12 @@ package org.hidetake.util.oauth.extensionpoint;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 
-import org.hidetake.util.oauth.config.AppRegistry;
+import org.hidetake.util.oauth.config.ExtensionRegistry;
+import org.hidetake.util.oauth.model.OpenSocialRequestValidator;
 
 public interface FilterInitializing extends ExtensionPoint
 {
 
-	public void init(FilterConfig config, AppRegistry appRegistry) throws ServletException;
+	public void init(FilterConfig config, OpenSocialRequestValidator validator, ExtensionRegistry extensionRegistry) throws ServletException;
 
 }
