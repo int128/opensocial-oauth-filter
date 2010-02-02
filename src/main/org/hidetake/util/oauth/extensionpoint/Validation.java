@@ -15,17 +15,62 @@
  */
 package org.hidetake.util.oauth.extensionpoint;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.hidetake.util.oauth.model.OpenSocialException;
 import org.hidetake.util.oauth.model.OpenSocialRequest;
 
+/**
+ * OpenSocial request validation extension point.
+ * 
+ * @author hidetake.org
+ *
+ */
 public interface Validation extends ExtensionPoint
 {
 
-	public void passed(HttpServletRequest request, HttpServletResponse response, OpenSocialRequest openSocialRequest);
+	/**
+	 * Called when the validation has been passed.
+	 * @param request
+	 * @param response
+	 * @param openSocialRequest
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void passed(
+		HttpServletRequest request,
+		HttpServletResponse response,
+		OpenSocialRequest openSocialRequest)
+	throws ServletException, IOException;
 
-	public void failed(HttpServletRequest request, HttpServletResponse response, OpenSocialException reason);
+	/**
+	 * Called when the validation has been failed.
+	 * @param request
+	 * @param response
+	 * @param reason
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void failed(
+		HttpServletRequest request,
+		HttpServletResponse response,
+		OpenSocialException reason)
+	throws ServletException, IOException;
+
+	/**
+	 * Called when the validation has been skipped (not passed).
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void skipped(
+		HttpServletRequest request,
+		HttpServletResponse response)
+	throws ServletException, IOException;
 
 }

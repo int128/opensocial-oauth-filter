@@ -15,8 +15,6 @@
  */
 package org.hidetake.util.oauth.extension;
 
-import java.util.logging.Logger;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,15 +23,11 @@ import org.hidetake.util.oauth.extensionpoint.AccessControl;
 public class AllowLocalhost implements AccessControl
 {
 
-	private static final Logger log = Logger.getLogger(AllowLocalhost.class.getName());
-
 	public boolean skipValidation(HttpServletRequest request, HttpServletResponse response)
 	{
-		if("127.0.0.1".equals(request.getRemoteAddr()) || "0:0:0:0:0:0:0:1".equals(request.getRemoteAddr())) {
-			log.info("Validation skipped: " + request.getRemoteHost() + " [" + request.getRemoteAddr() + "]");
-			return true;
-		}
-		return false;
+		return 
+			"127.0.0.1".equals(request.getRemoteAddr()) ||
+			"0:0:0:0:0:0:0:1".equals(request.getRemoteAddr());
 	}
 
 }

@@ -15,6 +15,7 @@
  */
 package org.hidetake.util.oauth.extension;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.servlet.FilterConfig;
@@ -64,6 +65,11 @@ public class ValidationLogger implements FilterInitializing, Validation
 	public void passed(HttpServletRequest request, HttpServletResponse response, OpenSocialRequest openSocialRequest)
 	{
 		log.info("Validation passed: viewer=" + openSocialRequest.getViewerId() + ", owner=" + openSocialRequest.getOwnerId());
+	}
+
+	public void skipped(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		log.info("Validation skipped: from=" + request.getRemoteHost() + " [" + request.getRemoteAddr() + "]");
 	}
 
 }

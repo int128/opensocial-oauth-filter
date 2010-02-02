@@ -54,8 +54,8 @@ import org.xml.sax.SAXException;
  * web.xml exmaple:
  * <code><pre>
  *  &lt;filter&gt;
- *      &lt;filter-name&gt;oauth-filter&lt;/filter-name&gt;
- *      &lt;filter-class&gt;org.hidetake.util.oauth.OAuthValidationFilter&lt;/filter-class&gt;
+ *      &lt;filter-name&gt;opensocial-oauth-filter&lt;/filter-name&gt;
+ *      &lt;filter-class&gt;org.hidetake.util.oauth.OpenSocialRequestValidationFilter&lt;/filter-class&gt;
  *  &lt;/filter&gt;
  * </pre></code>
  * </p>
@@ -71,6 +71,7 @@ public class OpenSocialRequestValidationFilter implements Filter
 
 	public void init(FilterConfig filterConfig) throws ServletException
 	{
+		// determine configuration file path
 		String configPath = filterConfig.getInitParameter("config");
 		if(configPath == null) {
 			configPath = "WEB-INF/opensocial-oauth-filter.xml";
@@ -134,7 +135,13 @@ public class OpenSocialRequestValidationFilter implements Filter
 				skip |= extension.skipValidation(request, response);
 			}
 			
-			if(!skip) {
+			if(skip) {
+				// notify skipped
+				for(Validation extension : extensionRegistry.getExtensions(Validation.class)) {
+					extension.skipped(request, response);
+				}
+			}
+			else {
 				// create oauth message
 				StringBuilder url = OpenSocialRequest.parseRequestUrl(request);
 				
@@ -151,6 +158,7 @@ public class OpenSocialRequestValidationFilter implements Filter
 				// validate request
 				validator.validate(openSocialRequest);
 				
+				// notify passed
 				for(Validation extension : extensionRegistry.getExtensions(Validation.class)) {
 					extension.passed(request, response, openSocialRequest);
 				}
@@ -160,6 +168,7 @@ public class OpenSocialRequestValidationFilter implements Filter
 			chain.doFilter(request, response);
 		}
 		catch (OpenSocialException e) {
+			// notify failed
 			for(Validation extension : extensionRegistry.getExtensions(Validation.class)) {
 				extension.failed(request, response, e);
 			}
