@@ -27,8 +27,10 @@ import org.hidetake.util.oauth.extensionpoint.ExtensionPoint;
 public class ExtensionRegistry
 {
 
-	private final Map<Class<? extends ExtensionPoint>, List<? extends ExtensionPoint>> map =
-		new HashMap<Class<? extends ExtensionPoint>, List<? extends ExtensionPoint>>();
+	private final Map<Class<? extends ExtensionPoint>, List<ExtensionPoint>> map =
+		new HashMap<Class<? extends ExtensionPoint>, List<ExtensionPoint>>();
+
+	private static final Iterable<ExtensionPoint> emptyList = new ArrayList<ExtensionPoint>();
 
 	protected ExtensionRegistry()
 	{
@@ -44,9 +46,11 @@ public class ExtensionRegistry
 		for(Class<I> c : extension.getClass().getInterfaces()) {
 			// find subclass of ExtensionPoint
 			if(ExtensionPoint.class.isAssignableFrom(c)) {
-				List<I> list = getExtensions(c);
+				List<ExtensionPoint> list = map.get(c);
+				
 				if(list == null) {
-					list = new ArrayList<I>();
+					// first time to register this kind of extension
+					list = new ArrayList<ExtensionPoint>();
 					map.put(c, list);
 				}
 				
@@ -55,10 +59,13 @@ public class ExtensionRegistry
 		}
 	}
 
-	public <I extends ExtensionPoint> List<I> getExtensions(Class<I> c)
+	@SuppressWarnings("unchecked")
+	public <I extends ExtensionPoint> Iterable<I> getExtensions(Class<I> c)
 	{
-		@SuppressWarnings("unchecked")
 		List<I> list = (List<I>) map.get(c);
+		if(list == null) {
+			return (Iterable<I>) emptyList;
+		}
 		return list;
 	}
 

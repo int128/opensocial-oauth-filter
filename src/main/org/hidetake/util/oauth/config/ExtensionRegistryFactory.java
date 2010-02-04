@@ -40,6 +40,10 @@ public class ExtensionRegistryFactory
 			
 			return registry;
 		}
+		catch (NoSuchNodeException e) {
+			// returns empty list
+			return registry;
+		}
 		catch (InstantiationException e) {
 			throw new ConfigurationException(e);
 		}
@@ -47,9 +51,6 @@ public class ExtensionRegistryFactory
 			throw new ConfigurationException(e);
 		}
 		catch (ClassNotFoundException e) {
-			throw new ConfigurationException(e);
-		}
-		catch (NoSuchNodeException e) {
 			throw new ConfigurationException(e);
 		}
 	}
