@@ -16,6 +16,7 @@
 package org.hidetake.util.oauth.test.config;
 
 import java.io.InputStream;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -26,9 +27,11 @@ import org.hidetake.util.oauth.config.AppRegistry;
 import org.hidetake.util.oauth.config.AppRegistryFactory;
 import org.hidetake.util.oauth.config.ConfigurationException;
 import org.hidetake.util.oauth.model.OpenSocialApp;
-import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Document;
+
+import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 
 
 public class AppRegistryFactoryTest
@@ -44,13 +47,32 @@ public class AppRegistryFactoryTest
 		final AppRegistryFactory factory = new AppRegistryFactory();
 		final AppRegistry registry = factory.create(xml);
 		
-		final OpenSocialApp openSocialApp = registry.getList().get(0);
-		Assert.assertEquals("test", openSocialApp.getAppId());
-		Assert.assertEquals("http://www.example.com/apps/test", openSocialApp.getAppUrl());
+		final List<OpenSocialApp> list = registry.getList();
+		assertThat(list.size(), is(1));
+		
+		final OpenSocialApp openSocialApp = list.get(0);
+		assertThat(openSocialApp.getAppId(), is("test"));
+		assertThat(openSocialApp.getAppUrl(), is("http://www.example.com/apps/test"));
 		
 		final OAuthAccessor oauthAccessor = openSocialApp.getOAuthAccessor();
-		Assert.assertEquals("mixi.jp", oauthAccessor.consumer.consumerKey);
-		System.out.println(oauthAccessor.consumer.getProperty(RSA_SHA1.X509_CERTIFICATE));
+		assertThat(oauthAccessor.consumer.consumerKey, is("mixi.jp"));
+		assertThat((String) oauthAccessor.consumer.getProperty(RSA_SHA1.X509_CERTIFICATE),
+			is("-----BEGIN CERTIFICATE-----\n" +
+				"MIICdzCCAeCgAwIBAgIJAOi/chE0MhufMA0GCSqGSIb3DQEBBQUAMDIxCzAJBgNV\n" +
+				"BAYTAkpQMREwDwYDVQQKEwhtaXhpIEluYzEQMA4GA1UEAxMHbWl4aS5qcDAeFw0w\n" +
+				"OTA0MjgwNzAyMTVaFw0xMDA0MjgwNzAyMTVaMDIxCzAJBgNVBAYTAkpQMREwDwYD\n" +
+				"VQQKEwhtaXhpIEluYzEQMA4GA1UEAxMHbWl4aS5qcDCBnzANBgkqhkiG9w0BAQEF\n" +
+				"AAOBjQAwgYkCgYEAwEj53VlQcv1WHvfWlTP+T1lXUg91W+bgJSuHAD89PdVf9Ujn\n" +
+				"i92EkbjqaLDzA43+U5ULlK/05jROnGwFBVdISxULgevSpiTfgbfCcKbRW7hXrTSm\n" +
+				"jFREp7YOvflT3rr7qqNvjm+3XE157zcU33SXMIGvX1uQH/Y4fNpEE1pmX+UCAwEA\n" +
+				"AaOBlDCBkTAdBgNVHQ4EFgQUn2ewbtnBTjv6CpeT37jrBNF/h6gwYgYDVR0jBFsw\n" +
+				"WYAUn2ewbtnBTjv6CpeT37jrBNF/h6ihNqQ0MDIxCzAJBgNVBAYTAkpQMREwDwYD\n" +
+				"VQQKEwhtaXhpIEluYzEQMA4GA1UEAxMHbWl4aS5qcIIJAOi/chE0MhufMAwGA1Ud\n" +
+				"EwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAR7v8eaCaiB5xFVf9k9jOYPjCSQIJ\n" +
+				"58nLY869OeNXWWIQ17Tkprcf8ipxsoHj0Z7hJl/nVkSWgGj/bJLTVT9DrcEd6gLa\n" +
+				"h5TbGftATZCAJ8QJa3X2omCdB29qqyjz4F6QyTi930qekawPBLlWXuiP3oRNbiow\n" +
+				"nOLWEi16qH9WuBs=\n" +
+				"-----END CERTIFICATE-----"));
 	}
 
 	@Test(expected = ConfigurationException.class)

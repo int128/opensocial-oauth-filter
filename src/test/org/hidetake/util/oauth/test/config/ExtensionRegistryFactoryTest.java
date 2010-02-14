@@ -15,6 +15,9 @@
  */
 package org.hidetake.util.oauth.test.config;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
@@ -33,7 +36,6 @@ import org.hidetake.util.oauth.extensionpoint.ExtensionPoint;
 import org.hidetake.util.oauth.extensionpoint.FilterInitializing;
 import org.hidetake.util.oauth.extensionpoint.RequestURL;
 import org.hidetake.util.oauth.extensionpoint.Validation;
-import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -45,11 +47,12 @@ public class ExtensionRegistryFactoryTest
 	@Test
 	public void testGetAllExtensions1() throws Exception
 	{
-		ExtensionRegistry extensionRegistry = setupExtensionRegistry("config1.xml");
-		Set<ExtensionPoint> allExtensions = extensionRegistry.getAllExtensions();
+		final ExtensionRegistry extensionRegistry = setupExtensionRegistry("config1.xml");
 		
-		Assert.assertEquals(2, allExtensions.size());
+		final Set<ExtensionPoint> allExtensions = extensionRegistry.getAllExtensions();
+		assertThat(allExtensions.size(), is(2));
 		
+		// check items
 		final Set<String> expected = new HashSet<String>();
 		expected.add(AllowLocalhost.class.getName());
 		expected.add(ValidationLogger.class.getName());
@@ -59,62 +62,63 @@ public class ExtensionRegistryFactoryTest
 			actual.add(extensionPoint.getClass().getName());
 		}
 		
-		Assert.assertEquals(expected, actual);
+		assertThat(actual.size(), is(2));
+		assertThat(expected.size(), is(2));
+		assertThat(actual, is(expected));
 	}
 	
 	@Test
 	public void testGetAllExtensions2() throws Exception
 	{
-		ExtensionRegistry extensionRegistry = setupExtensionRegistry("config2.xml");
-		Set<ExtensionPoint> allExtensions = extensionRegistry.getAllExtensions();
+		final ExtensionRegistry extensionRegistry = setupExtensionRegistry("config2.xml");
 		
-		Assert.assertEquals(1, allExtensions.size());
+		final Set<ExtensionPoint> allExtensions = extensionRegistry.getAllExtensions();
+		assertThat(allExtensions.size(), is(1));
 		
-		Assert.assertEquals(
-			AllowLocalhost.class.getName(),
-			allExtensions.toArray()[0].getClass().getName());
+		final ExtensionPoint actual = allExtensions.iterator().next();
+		assertThat(actual.getClass().getName(), is(AllowLocalhost.class.getName()));
 	}
 	
 	@Test
 	public void testGetAllExtensions3() throws Exception
 	{
-		ExtensionRegistry extensionRegistry = setupExtensionRegistry("config3.xml");
-		Set<ExtensionPoint> allExtensions = extensionRegistry.getAllExtensions();
+		final ExtensionRegistry extensionRegistry = setupExtensionRegistry("config3.xml");
 		
-		Assert.assertTrue(allExtensions.isEmpty());
+		final Set<ExtensionPoint> allExtensions = extensionRegistry.getAllExtensions();
+		assertThat(allExtensions.isEmpty(), is(true));
 	}
 	
 	@Test
 	public void testGetExtensions1() throws Exception
 	{
-		ExtensionRegistry extensionRegistry = setupExtensionRegistry("config1.xml");
+		final ExtensionRegistry extensionRegistry = setupExtensionRegistry("config1.xml");
 		
-		Assert.assertTrue(extensionRegistry.getExtensions(AccessControl.class).iterator().hasNext());
-		Assert.assertTrue(extensionRegistry.getExtensions(FilterInitializing.class).iterator().hasNext());
-		Assert.assertFalse(extensionRegistry.getExtensions(RequestURL.class).iterator().hasNext());
-		Assert.assertTrue(extensionRegistry.getExtensions(Validation.class).iterator().hasNext());
+		assertThat(extensionRegistry.getExtensions(AccessControl.class).iterator().hasNext(), is(true));
+		assertThat(extensionRegistry.getExtensions(FilterInitializing.class).iterator().hasNext(), is(true));
+		assertThat(extensionRegistry.getExtensions(RequestURL.class).iterator().hasNext(), is(false));
+		assertThat(extensionRegistry.getExtensions(Validation.class).iterator().hasNext(), is(true));
 	}
 	
 	@Test
 	public void testGetExtensions2() throws Exception
 	{
-		ExtensionRegistry extensionRegistry = setupExtensionRegistry("config2.xml");
+		final ExtensionRegistry extensionRegistry = setupExtensionRegistry("config2.xml");
 		
-		Assert.assertTrue(extensionRegistry.getExtensions(AccessControl.class).iterator().hasNext());
-		Assert.assertFalse(extensionRegistry.getExtensions(FilterInitializing.class).iterator().hasNext());
-		Assert.assertFalse(extensionRegistry.getExtensions(RequestURL.class).iterator().hasNext());
-		Assert.assertFalse(extensionRegistry.getExtensions(Validation.class).iterator().hasNext());
+		assertThat(extensionRegistry.getExtensions(AccessControl.class).iterator().hasNext(), is(true));
+		assertThat(extensionRegistry.getExtensions(FilterInitializing.class).iterator().hasNext(), is(false));
+		assertThat(extensionRegistry.getExtensions(RequestURL.class).iterator().hasNext(), is(false));
+		assertThat(extensionRegistry.getExtensions(Validation.class).iterator().hasNext(), is(false));
 	}
 	
 	@Test
 	public void testGetExtensions3() throws Exception
 	{
-		ExtensionRegistry extensionRegistry = setupExtensionRegistry("config3.xml");
+		final ExtensionRegistry extensionRegistry = setupExtensionRegistry("config3.xml");
 		
-		Assert.assertFalse(extensionRegistry.getExtensions(AccessControl.class).iterator().hasNext());
-		Assert.assertFalse(extensionRegistry.getExtensions(FilterInitializing.class).iterator().hasNext());
-		Assert.assertFalse(extensionRegistry.getExtensions(RequestURL.class).iterator().hasNext());
-		Assert.assertFalse(extensionRegistry.getExtensions(Validation.class).iterator().hasNext());
+		assertThat(extensionRegistry.getExtensions(AccessControl.class).iterator().hasNext(), is(false));
+		assertThat(extensionRegistry.getExtensions(FilterInitializing.class).iterator().hasNext(), is(false));
+		assertThat(extensionRegistry.getExtensions(RequestURL.class).iterator().hasNext(), is(false));
+		assertThat(extensionRegistry.getExtensions(Validation.class).iterator().hasNext(), is(false));
 	}
 
 	private ExtensionRegistry setupExtensionRegistry(String path)
@@ -124,8 +128,10 @@ public class ExtensionRegistryFactoryTest
 		final DocumentBuilderFactory df = DocumentBuilderFactory.newInstance();
 		final Document xml = df.newDocumentBuilder().parse(stream);
 		
-		ExtensionRegistryFactory factory = new ExtensionRegistryFactory();
-		ExtensionRegistry extensionRegistry = factory.create(xml);
+		final ExtensionRegistryFactory factory = new ExtensionRegistryFactory();
+		final ExtensionRegistry extensionRegistry = factory.create(xml);
+		assertThat(extensionRegistry, is(notNullValue()));
+		
 		return extensionRegistry;
 	}
 

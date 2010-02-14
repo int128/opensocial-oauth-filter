@@ -15,11 +15,13 @@
  */
 package org.hidetake.util.oauth.test.extension;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
+
 import org.hidetake.util.oauth.config.ExtensionRegistry;
 import org.hidetake.util.oauth.config.ExtensionRegistryFactory;
 import org.hidetake.util.oauth.extensionpoint.ExtensionPoint;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -48,7 +50,7 @@ public class ExtensionRegistryTest
 		}
 		public void notify(String message)
 		{
-			Assert.assertEquals(expected, message);
+			assertThat(message, is(expected));
 			notified = true;
 		}
 		public boolean isNotified()
@@ -68,12 +70,12 @@ public class ExtensionRegistryTest
 		}
 		public void notify(String message)
 		{
-			Assert.assertEquals(expected, message);
+			assertThat(message, is(expected));
 			notified = true;
 		}
 		public void hoge(String message)
 		{
-			Assert.assertEquals(expected, message);
+			assertThat(message, is(expected));
 			hoged = true;
 		}
 		public boolean isNotified()
@@ -90,7 +92,7 @@ public class ExtensionRegistryTest
 	public void test1() throws Exception
 	{
 		final String expected = "hage";
-		SingleExtension single = new SingleExtension(expected);
+		final SingleExtension single = new SingleExtension(expected);
 		extensionRegistry.register(single);
 		
 		//some...
@@ -100,14 +102,14 @@ public class ExtensionRegistryTest
 			extension.notify(expected);
 		}
 		
-		Assert.assertTrue(single.isNotified());
+		assertThat(single.isNotified(), is(true));
 	}
 
 	@Test
 	public void test2() throws Exception
 	{
 		final String expected = "hage";
-		MultipleExtension multiple = new MultipleExtension(expected);
+		final MultipleExtension multiple = new MultipleExtension(expected);
 		extensionRegistry.register(multiple);
 		
 		//some...
@@ -122,14 +124,15 @@ public class ExtensionRegistryTest
 			extension.hoge(expected);
 		}
 		
-		Assert.assertTrue(multiple.isNotified());
-		Assert.assertTrue(multiple.isHoged());
+		assertThat(multiple.isNotified(), is(true));
+		assertThat(multiple.isHoged(), is(true));
 	}
 
 	@Before
 	public void before()
 	{
 		extensionRegistry = new ExtensionRegistryFactory().create();
+		assertThat(extensionRegistry, is(notNullValue()));
 	}
 
 	@After

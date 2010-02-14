@@ -15,10 +15,12 @@
  */
 package org.hidetake.util.oauth.test;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.hidetake.util.oauth.model.OpenSocialRequest;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class OpenSocialRequestTest
@@ -34,10 +36,9 @@ public class OpenSocialRequestTest
 			public String getScheme(){return "http";}
 			public String getRequestURI(){return "/test";}
 		};
-		final String expected = "http://www.example.com/test";
 		
 		final StringBuilder url = OpenSocialRequest.parseRequestUrl(input);
-		Assert.assertEquals(expected, url.toString());
+		assertThat(url.toString(), is("http://www.example.com/test"));
 	}
 
 	@Test
@@ -50,10 +51,9 @@ public class OpenSocialRequestTest
 			public String getScheme(){return "http";}
 			public String getRequestURI(){return "/test";}
 		};
-		final String expected = "http://www.example.com/test";
 		
 		final StringBuilder url = OpenSocialRequest.parseRequestUrl(input);
-		Assert.assertEquals(expected, url.toString());
+		assertThat(url.toString(), is("http://www.example.com/test"));
 	}
 
 	@Test
@@ -66,10 +66,9 @@ public class OpenSocialRequestTest
 			public String getScheme(){return "http";}
 			public String getRequestURI(){return "/test";}
 		};
-		final String expected = "http://www.example.com:8080/test";
 		
 		final StringBuilder url = OpenSocialRequest.parseRequestUrl(input);
-		Assert.assertEquals(expected, url.toString());
+		assertThat(url.toString(), is("http://www.example.com:8080/test"));
 	}
 
 	@Test
@@ -82,10 +81,9 @@ public class OpenSocialRequestTest
 			public String getScheme(){return "https";}
 			public String getRequestURI(){return "/test";}
 		};
-		final String expected = "https://www.example.com/test";
 		
 		final StringBuilder url = OpenSocialRequest.parseRequestUrl(input);
-		Assert.assertEquals(expected, url.toString());
+		assertThat(url.toString(), is("https://www.example.com/test"));
 	}
 
 	@Test
@@ -98,10 +96,9 @@ public class OpenSocialRequestTest
 			public String getScheme(){return "https";}
 			public String getRequestURI(){return "/test";}
 		};
-		final String expected = "https://www.example.com/test";
 		
 		final StringBuilder url = OpenSocialRequest.parseRequestUrl(input);
-		Assert.assertEquals(expected, url.toString());
+		assertThat(url.toString(), is("https://www.example.com/test"));
 	}
 
 	@Test
@@ -114,10 +111,9 @@ public class OpenSocialRequestTest
 			public String getScheme(){return "https";}
 			public String getRequestURI(){return "/test";}
 		};
-		final String expected = "https://www.example.com:8443/test";
 		
 		final StringBuilder url = OpenSocialRequest.parseRequestUrl(input);
-		Assert.assertEquals(expected, url.toString());
+		assertThat(url.toString(), is("https://www.example.com:8443/test"));
 	}
 
 }

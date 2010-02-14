@@ -15,9 +15,10 @@
  */
 package org.hidetake.util.oauth.test.extension;
 
-import javax.servlet.http.HttpServletRequest;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 
-import junit.framework.Assert;
+import javax.servlet.http.HttpServletRequest;
 
 import org.hidetake.util.oauth.extension.ReverseProxyHost;
 import org.hidetake.util.oauth.test.HttpServletRequestStub;
@@ -40,10 +41,10 @@ public class ReverseProxyHostTest extends ReverseProxyHost
 				return null;
 			}
 		};
-		final String expected = "http://www.example.com/test";
 		
 		postprocess(input, context);
-		Assert.assertEquals(expected, input.toString());
+		
+		assertThat(input.toString(), is("http://www.example.com/test"));
 	}
 
 	@Test
@@ -57,10 +58,10 @@ public class ReverseProxyHostTest extends ReverseProxyHost
 				return null;
 			}
 		};
-		final String expected = "http://proxy/test";
 		
 		postprocess(input, context);
-		Assert.assertEquals(expected, input.toString());
+		
+		assertThat(input.toString(), is("http://proxy/test"));
 	}
 
 }
