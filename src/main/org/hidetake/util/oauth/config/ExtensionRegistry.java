@@ -16,34 +16,54 @@
 package org.hidetake.util.oauth.config;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.hidetake.util.oauth.extensionpoint.ExtensionPoint;
 
+/**
+ * Registry class for extensions.
+ * 
+ * @author hidetake.org
+ *
+ */
 public class ExtensionRegistry
 {
 
 	private final Map<Class<? extends ExtensionPoint>, List<ExtensionPoint>> map =
 		new HashMap<Class<? extends ExtensionPoint>, List<ExtensionPoint>>();
 
-	private static final Iterable<ExtensionPoint> emptyList = new ArrayList<ExtensionPoint>();
+	private final List<ExtensionPoint> allExtensions = new ArrayList<ExtensionPoint>();
+
+	// Constant value for getExtensions()
+	private static final List<ExtensionPoint> emptyList =
+		Collections.unmodifiableList(new ArrayList<ExtensionPoint>());
 
 	protected ExtensionRegistry()
 	{
 	}
 	
+	/**
+	 * Reset state of this registry.
+	 */
 	public void reset()
 	{
 		map.clear();
+		allExtensions.clear();
 	}
 
-	public <I extends ExtensionPoint> void register(I extension)
+	/**
+	 * Register an extension.
+	 * @param extension
+	 */
+	public void register(ExtensionPoint extension)
 	{
-		for(Class<I> c : extension.getClass().getInterfaces()) {
+		allExtensions.add(extension);
+		
+		// TODO: consider interface hierarchy
+		for(Class<? extends ExtensionPoint> c : extension.getClass().getInterfaces()) {
 			// find subclass of ExtensionPoint
 			if(ExtensionPoint.class.isAssignableFrom(c)) {
 				List<ExtensionPoint> list = map.get(c);
@@ -59,23 +79,29 @@ public class ExtensionRegistry
 		}
 	}
 
+	/**
+	 * Returns list of specified type extensions.
+	 * @param <I> extension point interface
+	 * @param c
+	 * @return read-only list
+	 */
 	@SuppressWarnings("unchecked")
 	public <I extends ExtensionPoint> Iterable<I> getExtensions(Class<I> c)
 	{
 		List<I> list = (List<I>) map.get(c);
 		if(list == null) {
-			return (Iterable<I>) emptyList;
+			return (List<I>) emptyList;
 		}
 		return list;
 	}
 
-	public Set<ExtensionPoint> getAllExtensions()
+	/**
+	 * Returns set of all extensions.
+	 * @return read-only set object
+	 */
+	public List<ExtensionPoint> getAllExtensions()
 	{
-		Set<ExtensionPoint> result = new HashSet<ExtensionPoint>();
-		for(List<? extends ExtensionPoint> list : map.values()) {
-			result.addAll(list);
-		}
-		return result;
+		return Collections.unmodifiableList(allExtensions);
 	}
 
 }
