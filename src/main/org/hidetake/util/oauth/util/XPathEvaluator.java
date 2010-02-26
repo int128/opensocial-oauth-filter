@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hidetake.util.oauth.config;
+package org.hidetake.util.oauth.util;
 
 import java.util.Iterator;
 import java.util.Map;
