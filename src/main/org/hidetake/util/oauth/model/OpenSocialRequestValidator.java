@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 
-import org.hidetake.util.oauth.config.AppRegistry;
 
 
 import net.oauth.OAuthException;

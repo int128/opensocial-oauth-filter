@@ -25,6 +25,8 @@ import net.oauth.OAuthAccessor;
 import net.oauth.OAuthConsumer;
 
 import org.hidetake.util.oauth.extensionpoint.ExtensionPoint;
+import org.hidetake.util.oauth.model.AppRegistry;
+import org.hidetake.util.oauth.model.ExtensionRegistry;
 import org.hidetake.util.oauth.model.OpenSocialApp;
 import org.hidetake.util.oauth.util.NoSuchNodeException;
 import org.hidetake.util.oauth.util.XPathEvaluator;
@@ -40,7 +42,7 @@ import org.w3c.dom.Node;
 public class XmlRegistryConfigurator implements RegistryConfigurator
 {
 
-	final Document source;
+	private final Document source;
 	private final XPath xpath = XPathEvaluator.createXPath();
 	
 	public XmlRegistryConfigurator(Document sourceXML)

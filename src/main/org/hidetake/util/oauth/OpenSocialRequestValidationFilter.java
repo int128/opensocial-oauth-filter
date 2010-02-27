@@ -32,15 +32,15 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import net.oauth.OAuthMessage;
 
-import org.hidetake.util.oauth.config.AppRegistry;
 import org.hidetake.util.oauth.config.ConfigurationException;
-import org.hidetake.util.oauth.config.ExtensionRegistry;
 import org.hidetake.util.oauth.config.RegistryConfigurator;
 import org.hidetake.util.oauth.config.XmlRegistryConfigurator;
 import org.hidetake.util.oauth.extensionpoint.AccessControl;
 import org.hidetake.util.oauth.extensionpoint.FilterInitializing;
 import org.hidetake.util.oauth.extensionpoint.RequestURL;
 import org.hidetake.util.oauth.extensionpoint.Validation;
+import org.hidetake.util.oauth.model.AppRegistry;
+import org.hidetake.util.oauth.model.ExtensionRegistry;
 import org.hidetake.util.oauth.model.OpenSocialException;
 import org.hidetake.util.oauth.model.OpenSocialRequest;
 import org.hidetake.util.oauth.model.OpenSocialRequestValidator;

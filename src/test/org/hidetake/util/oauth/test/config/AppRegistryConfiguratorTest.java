@@ -23,10 +23,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import net.oauth.OAuthAccessor;
 import net.oauth.signature.RSA_SHA1;
 
-import org.hidetake.util.oauth.config.AppRegistry;
 import org.hidetake.util.oauth.config.RegistryConfigurator;
 import org.hidetake.util.oauth.config.XmlRegistryConfigurator;
 import org.hidetake.util.oauth.config.ConfigurationException;
+import org.hidetake.util.oauth.model.AppRegistry;
 import org.hidetake.util.oauth.model.OpenSocialApp;
 import org.junit.Test;
 import org.w3c.dom.Document;

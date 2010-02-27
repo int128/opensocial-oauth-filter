@@ -23,11 +23,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hidetake.util.oauth.config.AppRegistry;
-import org.hidetake.util.oauth.config.ExtensionRegistry;
 import org.hidetake.util.oauth.extensionpoint.ExtensionPoint;
 import org.hidetake.util.oauth.extensionpoint.FilterInitializing;
 import org.hidetake.util.oauth.extensionpoint.Validation;
+import org.hidetake.util.oauth.model.AppRegistry;
+import org.hidetake.util.oauth.model.ExtensionRegistry;
 import org.hidetake.util.oauth.model.OpenSocialApp;
 import org.hidetake.util.oauth.model.OpenSocialException;
 import org.hidetake.util.oauth.model.OpenSocialRequest;

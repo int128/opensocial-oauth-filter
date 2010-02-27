@@ -29,7 +29,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.hidetake.util.oauth.config.ConfigurationException;
-import org.hidetake.util.oauth.config.ExtensionRegistry;
 import org.hidetake.util.oauth.config.RegistryConfigurator;
 import org.hidetake.util.oauth.config.XmlRegistryConfigurator;
 import org.hidetake.util.oauth.extension.AllowLocalhost;
@@ -39,6 +38,7 @@ import org.hidetake.util.oauth.extensionpoint.ExtensionPoint;
 import org.hidetake.util.oauth.extensionpoint.FilterInitializing;
 import org.hidetake.util.oauth.extensionpoint.RequestURL;
 import org.hidetake.util.oauth.extensionpoint.Validation;
+import org.hidetake.util.oauth.model.ExtensionRegistry;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;

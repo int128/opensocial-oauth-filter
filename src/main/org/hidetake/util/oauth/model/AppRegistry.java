@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hidetake.util.oauth.config;
+package org.hidetake.util.oauth.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hidetake.util.oauth.model.OpenSocialApp;
 
 public class AppRegistry
 {

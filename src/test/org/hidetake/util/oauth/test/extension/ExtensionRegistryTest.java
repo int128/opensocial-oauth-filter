@@ -18,8 +18,8 @@ package org.hidetake.util.oauth.test.extension;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
-import org.hidetake.util.oauth.config.ExtensionRegistry;
 import org.hidetake.util.oauth.extensionpoint.ExtensionPoint;
+import org.hidetake.util.oauth.model.ExtensionRegistry;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
