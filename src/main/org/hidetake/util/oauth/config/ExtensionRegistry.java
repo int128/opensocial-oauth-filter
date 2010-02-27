@@ -40,10 +40,6 @@ public class ExtensionRegistry
 	// Constant value for getExtensions()
 	private static final List<ExtensionPoint> emptyList =
 		Collections.unmodifiableList(new ArrayList<ExtensionPoint>());
-
-	protected ExtensionRegistry()
-	{
-	}
 	
 	/**
 	 * Reset state of this registry.

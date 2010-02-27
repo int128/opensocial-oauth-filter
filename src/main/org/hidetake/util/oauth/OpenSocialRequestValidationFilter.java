@@ -33,10 +33,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import net.oauth.OAuthMessage;
 
 import org.hidetake.util.oauth.config.AppRegistry;
-import org.hidetake.util.oauth.config.AppRegistryFactory;
 import org.hidetake.util.oauth.config.ConfigurationException;
 import org.hidetake.util.oauth.config.ExtensionRegistry;
-import org.hidetake.util.oauth.config.ExtensionRegistryFactory;
+import org.hidetake.util.oauth.config.RegistryConfigurator;
+import org.hidetake.util.oauth.config.XmlRegistryConfigurator;
 import org.hidetake.util.oauth.extensionpoint.AccessControl;
 import org.hidetake.util.oauth.extensionpoint.FilterInitializing;
 import org.hidetake.util.oauth.extensionpoint.RequestURL;
@@ -100,14 +100,17 @@ public class OpenSocialRequestValidationFilter implements Filter
 
 		// apply configuration
 		try {
+			RegistryConfigurator configurator = new XmlRegistryConfigurator(xml);
+
 			// register apps
-			AppRegistryFactory appRegistryFactory = new AppRegistryFactory();
-			AppRegistry appRegistry = appRegistryFactory.create(xml);
+			AppRegistry appRegistry = new AppRegistry();
+			configurator.configure(appRegistry);
+			
 			validator = new OpenSocialRequestValidator(appRegistry);
 			
 			// register extensions
-			ExtensionRegistryFactory extensionRegistryFactory = new ExtensionRegistryFactory();
-			extensionRegistry = extensionRegistryFactory.create(xml);
+			extensionRegistry = new ExtensionRegistry();
+			configurator.configure(extensionRegistry);
 		}
 		catch (ConfigurationException e) {
 			throw new ServletException(e);

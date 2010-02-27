@@ -24,6 +24,7 @@ import javax.xml.xpath.XPath;
 import net.oauth.OAuthAccessor;
 import net.oauth.OAuthConsumer;
 
+import org.hidetake.util.oauth.extensionpoint.ExtensionPoint;
 import org.hidetake.util.oauth.model.OpenSocialApp;
 import org.hidetake.util.oauth.util.NoSuchNodeException;
 import org.hidetake.util.oauth.util.XPathEvaluator;
@@ -36,21 +37,21 @@ import org.w3c.dom.Node;
  * @author hidetake.org
  *
  */
-public class AppRegistryFactory
+public class XmlRegistryConfigurator implements RegistryConfigurator
 {
 
+	final Document source;
 	private final XPath xpath = XPathEvaluator.createXPath();
 	
-	public AppRegistryFactory()
+	public XmlRegistryConfigurator(Document sourceXML)
 	{
+		this.source = sourceXML;
 	}
 	
-	public AppRegistry create(Document xml) throws ConfigurationException
+	public void configure(AppRegistry registry) throws ConfigurationException
 	{
-		AppRegistry registry = new AppRegistry();
-		
 		try {
-			XPathEvaluator rootEvaluator = new XPathEvaluator(xml, xpath);
+			XPathEvaluator rootEvaluator = new XPathEvaluator(source, xpath);
 			
 			for(Node appNode : rootEvaluator.getNodeList("/config/opensocial-apps/opensocial-app")) {
 				XPathEvaluator appNodeEvaluator = new XPathEvaluator(appNode, xpath);
@@ -67,10 +68,33 @@ public class AppRegistryFactory
 				OpenSocialApp app = new OpenSocialApp(appId, appUrl, oauthAccessor);
 				registry.register(app);
 			}
-			
-			return registry;
 		}
 		catch (NoSuchNodeException e) {
+			throw new ConfigurationException(e);
+		}
+	}
+	
+	public void configure(ExtensionRegistry registry) throws ConfigurationException
+	{
+		try {
+			XPathEvaluator rootEvaluator = new XPathEvaluator(source);
+			
+			for(String id : rootEvaluator.getNodeValueList("/config/extensions/extension/@id")) {
+				ExtensionPoint extension = (ExtensionPoint) Class.forName(id).newInstance();
+				registry.register(extension);
+			}
+		}
+		catch (NoSuchNodeException e) {
+			// no extension found
+			return;
+		}
+		catch (InstantiationException e) {
+			throw new ConfigurationException(e);
+		}
+		catch (IllegalAccessException e) {
+			throw new ConfigurationException(e);
+		}
+		catch (ClassNotFoundException e) {
 			throw new ConfigurationException(e);
 		}
 	}

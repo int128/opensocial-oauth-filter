@@ -30,7 +30,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.hidetake.util.oauth.config.ConfigurationException;
 import org.hidetake.util.oauth.config.ExtensionRegistry;
-import org.hidetake.util.oauth.config.ExtensionRegistryFactory;
+import org.hidetake.util.oauth.config.RegistryConfigurator;
+import org.hidetake.util.oauth.config.XmlRegistryConfigurator;
 import org.hidetake.util.oauth.extension.AllowLocalhost;
 import org.hidetake.util.oauth.extension.ValidationLogger;
 import org.hidetake.util.oauth.extensionpoint.AccessControl;
@@ -131,9 +132,9 @@ public class ExtensionRegistryFactoryTest
 		final DocumentBuilderFactory df = DocumentBuilderFactory.newInstance();
 		final Document xml = df.newDocumentBuilder().parse(stream);
 		
-		final ExtensionRegistryFactory factory = new ExtensionRegistryFactory();
-		final ExtensionRegistry extensionRegistry = factory.create(xml);
-		assertThat(extensionRegistry, is(notNullValue()));
+		final ExtensionRegistry extensionRegistry = new ExtensionRegistry();
+		final RegistryConfigurator configurator = new XmlRegistryConfigurator(xml);
+		configurator.configure(extensionRegistry);
 		
 		return extensionRegistry;
 	}

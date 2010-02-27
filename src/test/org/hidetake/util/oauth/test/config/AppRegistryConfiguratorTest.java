@@ -24,7 +24,8 @@ import net.oauth.OAuthAccessor;
 import net.oauth.signature.RSA_SHA1;
 
 import org.hidetake.util.oauth.config.AppRegistry;
-import org.hidetake.util.oauth.config.AppRegistryFactory;
+import org.hidetake.util.oauth.config.RegistryConfigurator;
+import org.hidetake.util.oauth.config.XmlRegistryConfigurator;
 import org.hidetake.util.oauth.config.ConfigurationException;
 import org.hidetake.util.oauth.model.OpenSocialApp;
 import org.junit.Test;
@@ -34,19 +35,22 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
 
-public class AppRegistryFactoryTest
+public class AppRegistryConfiguratorTest
 {
 
 	@Test
-	public void testApp1() throws Exception
+	public void testXML1() throws Exception
 	{
-		final InputStream stream = AppRegistryFactoryTest.class.getResourceAsStream("config1.xml");
+		// do
+		final InputStream stream = AppRegistryConfiguratorTest.class.getResourceAsStream("config1.xml");
 		final DocumentBuilderFactory df = DocumentBuilderFactory.newInstance();
 		final Document xml = df.newDocumentBuilder().parse(stream);
 
-		final AppRegistryFactory factory = new AppRegistryFactory();
-		final AppRegistry registry = factory.create(xml);
+		final AppRegistry registry = new AppRegistry();
+		final RegistryConfigurator configurator = new XmlRegistryConfigurator(xml);
+		configurator.configure(registry);
 		
+		// verify
 		final List<OpenSocialApp> list = registry.getList();
 		assertThat(list.size(), is(1));
 		
@@ -76,27 +80,27 @@ public class AppRegistryFactoryTest
 	}
 
 	@Test(expected = ConfigurationException.class)
-	public void testApp2() throws Exception
+	public void testXML2() throws Exception
 	{
-		final InputStream stream = AppRegistryFactoryTest.class.getResourceAsStream("config2.xml");
+		final InputStream stream = AppRegistryConfiguratorTest.class.getResourceAsStream("config2.xml");
 		final DocumentBuilderFactory df = DocumentBuilderFactory.newInstance();
 		final Document xml = df.newDocumentBuilder().parse(stream);
 
-		final AppRegistryFactory factory = new AppRegistryFactory();
-		
-		factory.create(xml);
+		final AppRegistry registry = new AppRegistry();
+		final RegistryConfigurator configurator = new XmlRegistryConfigurator(xml);
+		configurator.configure(registry);
 	}
 
 	@Test(expected = ConfigurationException.class)
-	public void testApp3() throws Exception
+	public void testXML3() throws Exception
 	{
-		final InputStream stream = AppRegistryFactoryTest.class.getResourceAsStream("config3.xml");
+		final InputStream stream = AppRegistryConfiguratorTest.class.getResourceAsStream("config3.xml");
 		final DocumentBuilderFactory df = DocumentBuilderFactory.newInstance();
 		final Document xml = df.newDocumentBuilder().parse(stream);
 
-		final AppRegistryFactory factory = new AppRegistryFactory();
-		
-		factory.create(xml);
+		final AppRegistry registry = new AppRegistry();
+		final RegistryConfigurator configurator = new XmlRegistryConfigurator(xml);
+		configurator.configure(registry);
 	}
 
 }

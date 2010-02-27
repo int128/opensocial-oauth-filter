@@ -19,7 +19,6 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 import org.hidetake.util.oauth.config.ExtensionRegistry;
-import org.hidetake.util.oauth.config.ExtensionRegistryFactory;
 import org.hidetake.util.oauth.extensionpoint.ExtensionPoint;
 import org.junit.After;
 import org.junit.Before;
@@ -131,7 +130,7 @@ public class ExtensionRegistryTest
 	@Before
 	public void before()
 	{
-		extensionRegistry = new ExtensionRegistryFactory().create();
+		extensionRegistry = new ExtensionRegistry();
 		assertThat(extensionRegistry, is(notNullValue()));
 	}
 
