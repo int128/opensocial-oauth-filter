@@ -64,7 +64,7 @@ public class XmlRegistryConfigurator implements RegistryConfigurator
 				String containerId = appNodeEvaluator.getString("./@container-id");
 				
 				// get oauth data
-				OAuthAccessor oauthAccessor = getOAuthAccessor(rootEvaluator, containerId);
+				OAuthAccessor oauthAccessor = getOAuthAccessor(containerId);
 				
 				// register
 				OpenSocialApp app = new OpenSocialApp(appId, appUrl, oauthAccessor);
@@ -99,8 +99,7 @@ public class XmlRegistryConfigurator implements RegistryConfigurator
 		}
 	}
 
-	private OAuthAccessor getOAuthAccessor(XPathEvaluator rootEvaluator, String containerId)
-	throws ConfigurationException
+	private OAuthAccessor getOAuthAccessor(String containerId) throws ConfigurationException
 	{
 		// get container node
 		Map<QName, Object> variableMap = new HashMap<QName, Object>();
@@ -117,12 +116,12 @@ public class XmlRegistryConfigurator implements RegistryConfigurator
 		}
 		
 		// get container parameters
-		XPathEvaluator containerEvaluator = new XPathEvaluator(containerNode, xpath);
-		
 		String consumerKey;
 		String signatureMethod;
 		String cert;
 		try {
+			XPathEvaluator containerEvaluator = new XPathEvaluator(containerNode, xpath);
+			
 			consumerKey = containerEvaluator.getString("./oauth/@consumer-key");
 			signatureMethod = containerEvaluator.getString("./oauth/@signature-method");
 			cert = containerEvaluator.getString("./oauth/certificate/text()").trim();
