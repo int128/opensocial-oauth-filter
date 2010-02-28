@@ -23,6 +23,7 @@ import javax.xml.xpath.XPath;
 
 import net.oauth.OAuthAccessor;
 import net.oauth.OAuthConsumer;
+import net.oauth.signature.RSA_SHA1;
 
 import org.hidetake.util.oauth.extensionpoint.ExtensionPoint;
 import org.hidetake.util.oauth.model.AppRegistry;
@@ -127,14 +128,19 @@ public class XmlRegistryConfigurator implements RegistryConfigurator
 			cert = containerEvaluator.getString("./oauth/certificate/text()").trim();
 		}
 		catch (NoSuchNodeException e) {
-			throw new ConfigurationException(e);
+			throw new ConfigurationException("No required attribute found");
 		}
 		
 		// initialize accessor
-		OAuthConsumer consumer = new OAuthConsumer(null, consumerKey, null, null);
-		consumer.setProperty(signatureMethod + ".X509Certificate", cert);
-		OAuthAccessor oauthAccessor = new OAuthAccessor(consumer);
-		return oauthAccessor;
+		if("RSA-SHA1".equals(signatureMethod)) {
+			OAuthConsumer consumer = new OAuthConsumer(null, consumerKey, null, null);
+			consumer.setProperty(RSA_SHA1.X509_CERTIFICATE, cert);
+			OAuthAccessor oauthAccessor = new OAuthAccessor(consumer);
+			return oauthAccessor;
+		}
+		else {
+			throw new ConfigurationException("Not implemented yet: " + signatureMethod);
+		}
 	}
 
 }
