@@ -52,7 +52,7 @@ public class ExtensionRegistryFactoryTest
 	{
 		final ExtensionRegistry extensionRegistry = setupExtensionRegistry("config1.xml");
 		
-		final List<ExtensionPoint> allExtensions = extensionRegistry.getAllExtensions();
+		final List<ExtensionPoint> allExtensions = extensionRegistry.getExtensions();
 		assertThat(allExtensions.size(), is(2));
 		
 		// check items
@@ -70,7 +70,7 @@ public class ExtensionRegistryFactoryTest
 	{
 		final ExtensionRegistry extensionRegistry = setupExtensionRegistry("config2.xml");
 		
-		final List<ExtensionPoint> allExtensions = extensionRegistry.getAllExtensions();
+		final List<ExtensionPoint> allExtensions = extensionRegistry.getExtensions();
 		assertThat(allExtensions.size(), is(1));
 		
 		final ExtensionPoint actual = allExtensions.iterator().next();
@@ -82,7 +82,7 @@ public class ExtensionRegistryFactoryTest
 	{
 		final ExtensionRegistry extensionRegistry = setupExtensionRegistry("config3.xml");
 		
-		final List<ExtensionPoint> allExtensions = extensionRegistry.getAllExtensions();
+		final List<ExtensionPoint> allExtensions = extensionRegistry.getExtensions();
 		assertThat(allExtensions.isEmpty(), is(true));
 	}
 	

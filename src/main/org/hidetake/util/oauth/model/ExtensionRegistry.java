@@ -32,10 +32,10 @@ import org.hidetake.util.oauth.extensionpoint.ExtensionPoint;
 public class ExtensionRegistry
 {
 
-	private final Map<Class<? extends ExtensionPoint>, List<ExtensionPoint>> map =
+	private final Map<Class<? extends ExtensionPoint>, List<ExtensionPoint>> extensionPointMap =
 		new HashMap<Class<? extends ExtensionPoint>, List<ExtensionPoint>>();
 
-	private final List<ExtensionPoint> allExtensions = new ArrayList<ExtensionPoint>();
+	private final List<ExtensionPoint> extensions = new ArrayList<ExtensionPoint>();
 
 	// Constant value for getExtensions()
 	private static final List<ExtensionPoint> emptyList =
@@ -46,8 +46,8 @@ public class ExtensionRegistry
 	 */
 	public void reset()
 	{
-		map.clear();
-		allExtensions.clear();
+		extensionPointMap.clear();
+		extensions.clear();
 	}
 
 	/**
@@ -56,18 +56,18 @@ public class ExtensionRegistry
 	 */
 	public void register(ExtensionPoint extension)
 	{
-		allExtensions.add(extension);
+		extensions.add(extension);
 		
 		// TODO: consider interface hierarchy
 		for(Class<? extends ExtensionPoint> c : extension.getClass().getInterfaces()) {
 			// find subclass of ExtensionPoint
 			if(ExtensionPoint.class.isAssignableFrom(c)) {
-				List<ExtensionPoint> list = map.get(c);
+				List<ExtensionPoint> list = extensionPointMap.get(c);
 				
 				if(list == null) {
 					// first time to register this kind of extension
 					list = new ArrayList<ExtensionPoint>();
-					map.put(c, list);
+					extensionPointMap.put(c, list);
 				}
 				
 				list.add(extension);
@@ -78,13 +78,13 @@ public class ExtensionRegistry
 	/**
 	 * Returns list of specified type extensions.
 	 * @param <I> extension point interface
-	 * @param c
+	 * @param kind
 	 * @return read-only list
 	 */
 	@SuppressWarnings("unchecked")
-	public <I extends ExtensionPoint> Iterable<I> getExtensions(Class<I> c)
+	public <I extends ExtensionPoint> Iterable<I> getExtensions(Class<I> kind)
 	{
-		List<I> list = (List<I>) map.get(c);
+		List<I> list = (List<I>) extensionPointMap.get(kind);
 		if(list == null) {
 			return (List<I>) emptyList;
 		}
@@ -92,12 +92,12 @@ public class ExtensionRegistry
 	}
 
 	/**
-	 * Returns set of all extensions.
+	 * Returns list of all extensions.
 	 * @return read-only set object
 	 */
-	public List<ExtensionPoint> getAllExtensions()
+	public List<ExtensionPoint> getExtensions()
 	{
-		return Collections.unmodifiableList(allExtensions);
+		return Collections.unmodifiableList(extensions);
 	}
 
 }

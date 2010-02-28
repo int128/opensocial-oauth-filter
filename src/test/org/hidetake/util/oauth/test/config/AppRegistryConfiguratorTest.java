@@ -51,7 +51,7 @@ public class AppRegistryConfiguratorTest
 		configurator.configure(registry);
 		
 		// verify
-		final List<OpenSocialApp> list = registry.getList();
+		final List<OpenSocialApp> list = registry.getApps();
 		assertThat(list.size(), is(1));
 		
 		final OpenSocialApp openSocialApp = list.get(0);

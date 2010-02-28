@@ -33,7 +33,7 @@ public class OpenSocialRequestValidator
 
 	public OpenSocialRequestValidator(AppRegistry appRegistry)
 	{
-		if(appRegistry.getList().size() == 0) {
+		if(appRegistry.getApps().size() == 0) {
 			throw new IllegalArgumentException("No registered opensocial-app found");
 		}
 		this.appRegistry = appRegistry;
@@ -46,11 +46,11 @@ public class OpenSocialRequestValidator
 	
 	public void validate(OpenSocialRequest openSocialRequest) throws OpenSocialException
 	{
-		if(appRegistry.getList().size() == 1) {
-			validateSingle(openSocialRequest, appRegistry.getList().get(0));
+		if(appRegistry.getApps().size() == 1) {
+			validateSingle(openSocialRequest, appRegistry.getApps().get(0));
 		}
 		else {
-			for(OpenSocialApp app : appRegistry.getList()) {
+			for(OpenSocialApp app : appRegistry.getApps()) {
 				try {
 					validateSingle(openSocialRequest, app);
 				}

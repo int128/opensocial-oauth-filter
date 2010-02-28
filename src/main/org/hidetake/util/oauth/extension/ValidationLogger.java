@@ -47,12 +47,12 @@ public class ValidationLogger implements FilterInitializing, Validation
 	public void init(FilterConfig config, OpenSocialRequestValidator validator, ExtensionRegistry extensionRegistry) throws ServletException
 	{
 		AppRegistry appRegistry = validator.getAppRegistry();
-		for(OpenSocialApp app : appRegistry.getList()) {
+		for(OpenSocialApp app : appRegistry.getApps()) {
 			log.info("Registered opensocial-app: id=" + app.getAppId() + ", url=" + app.getAppUrl());
 			log.info("Registered opensocial-container: " + app.getOAuthAccessor().consumer.consumerKey);
 		}
 		
-		for(ExtensionPoint extensionPoint : extensionRegistry.getAllExtensions()) {
+		for(ExtensionPoint extensionPoint : extensionRegistry.getExtensions()) {
 			log.info("Registered extension: " + extensionPoint.getClass().getName());
 		}
 	}

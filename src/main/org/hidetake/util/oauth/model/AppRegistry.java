@@ -22,20 +22,24 @@ import java.util.List;
 public class AppRegistry
 {
 
-	private final List<OpenSocialApp> appList = new ArrayList<OpenSocialApp>();
-
-	public AppRegistry()
-	{
-	}
+	private final List<OpenSocialApp> apps = new ArrayList<OpenSocialApp>();
 	
 	public void register(OpenSocialApp app)
 	{
-		appList.add(app);
+		apps.add(app);
 	}
 
-	public List<OpenSocialApp> getList()
+	public List<OpenSocialApp> getApps()
 	{
-		return appList;
+		return apps;
+	}
+	
+	/**
+	 * Reset state of this registry.
+	 */
+	public void reset()
+	{
+		apps.clear();
 	}
 
 }
