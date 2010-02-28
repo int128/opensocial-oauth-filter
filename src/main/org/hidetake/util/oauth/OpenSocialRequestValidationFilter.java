@@ -71,37 +71,57 @@ public class OpenSocialRequestValidationFilter implements Filter
 
 	public void init(FilterConfig filterConfig) throws ServletException
 	{
-		// determine configuration file path
-		String configPath = filterConfig.getInitParameter("config");
-		if(configPath == null) {
-			configPath = "WEB-INF/opensocial-oauth-filter.xml";
-		}
+		// determine configuration method
+		RegistryConfigurator configurator;
 		
-		// load configuration
-		Document xml;
-		try {
-			String realPath = filterConfig.getServletContext().getRealPath(configPath);
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			//documentBuilderFactory.setNamespaceAware(true);
-			xml = factory.newDocumentBuilder().parse(new FileInputStream(realPath));
+		String configClass = filterConfig.getInitParameter("config-class");
+		if(configClass != null) {
+			// instantiate
+			try {
+				configurator = (RegistryConfigurator) Class.forName(configClass).newInstance();
+			}
+			catch (InstantiationException e) {
+				throw new ServletException(e);
+			}
+			catch (IllegalAccessException e) {
+				throw new ServletException(e);
+			}
+			catch (ClassNotFoundException e) {
+				throw new ServletException(e);
+			}
 		}
-		catch (FileNotFoundException e) {
-			throw new ServletException(e);
-		}
-		catch (SAXException e) {
-			throw new ServletException(e);
-		}
-		catch (IOException e) {
-			throw new ServletException(e);
-		}
-		catch (ParserConfigurationException e) {
-			throw new ServletException(e);
+		else {
+			// get XML path
+			String configPath = filterConfig.getInitParameter("config");
+			if(configPath == null) {
+				configPath = "WEB-INF/opensocial-oauth-filter.xml";
+			}
+			
+			// load configuration
+			try {
+				String realPath = filterConfig.getServletContext().getRealPath(configPath);
+				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+				//factory.setNamespaceAware(true);
+				Document xml = factory.newDocumentBuilder().parse(new FileInputStream(realPath));
+				
+				configurator = new XmlRegistryConfigurator(xml);
+			}
+			catch (FileNotFoundException e) {
+				throw new ServletException(e);
+			}
+			catch (SAXException e) {
+				throw new ServletException(e);
+			}
+			catch (IOException e) {
+				throw new ServletException(e);
+			}
+			catch (ParserConfigurationException e) {
+				throw new ServletException(e);
+			}
 		}
 
 		// apply configuration
 		try {
-			RegistryConfigurator configurator = new XmlRegistryConfigurator(xml);
-
 			// register apps
 			AppRegistry appRegistry = new AppRegistry();
 			configurator.configure(appRegistry);
