@@ -22,8 +22,6 @@ import javax.xml.namespace.QName;
 import javax.xml.xpath.XPath;
 
 import net.oauth.OAuthAccessor;
-import net.oauth.OAuthConsumer;
-import net.oauth.signature.RSA_SHA1;
 
 import org.hidetake.util.oauth.extensionpoint.ExtensionPoint;
 import org.hidetake.util.oauth.model.AppRegistry;
@@ -40,7 +38,7 @@ import org.w3c.dom.Node;
  * @author hidetake.org
  *
  */
-public class XmlRegistryConfigurator implements RegistryConfigurator
+public class XmlRegistryConfigurator extends AbstractRegistryConfigurator
 {
 
 	private final XPathEvaluator rootEvaluator;
@@ -116,26 +114,28 @@ public class XmlRegistryConfigurator implements RegistryConfigurator
 		}
 		
 		// get container parameters
-		String consumerKey;
 		String signatureMethod;
-		String cert;
 		try {
 			XPathEvaluator containerEvaluator = new XPathEvaluator(containerNode, xpath);
-			
-			consumerKey = containerEvaluator.getString("./oauth/@consumer-key");
 			signatureMethod = containerEvaluator.getString("./oauth/@signature-method");
-			cert = containerEvaluator.getString("./oauth/certificate/text()").trim();
 		}
 		catch (NoSuchNodeException e) {
-			throw new ConfigurationException("No required attribute found");
+			throw new ConfigurationException("No signature method found");
 		}
 		
 		// initialize accessor
 		if("RSA-SHA1".equals(signatureMethod)) {
-			OAuthConsumer consumer = new OAuthConsumer(null, consumerKey, null, null);
-			consumer.setProperty(RSA_SHA1.X509_CERTIFICATE, cert);
-			OAuthAccessor oauthAccessor = new OAuthAccessor(consumer);
-			return oauthAccessor;
+			try {
+				XPathEvaluator containerEvaluator = new XPathEvaluator(containerNode, xpath);
+				
+				String consumerKey = containerEvaluator.getString("./oauth/@consumer-key");
+				String cert = containerEvaluator.getString("./oauth/certificate/text()").trim();
+				
+				return createAccessorRSASHA1(consumerKey, cert);
+			}
+			catch (NoSuchNodeException e) {
+				throw new ConfigurationException("No key or certificate found");
+			}
 		}
 		else {
 			throw new ConfigurationException("Not implemented yet: " + signatureMethod);
