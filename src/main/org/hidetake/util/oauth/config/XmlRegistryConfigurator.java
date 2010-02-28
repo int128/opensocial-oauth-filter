@@ -42,19 +42,18 @@ import org.w3c.dom.Node;
 public class XmlRegistryConfigurator implements RegistryConfigurator
 {
 
-	private final Document source;
-	private final XPath xpath = XPathEvaluator.createXPath();
+	private final XPathEvaluator rootEvaluator;
+	private final XPath xpath;
 	
 	public XmlRegistryConfigurator(Document sourceXML)
 	{
-		this.source = sourceXML;
+		this.xpath = XPathEvaluator.createXPath();
+		this.rootEvaluator = new XPathEvaluator(sourceXML, xpath);
 	}
 	
 	public void configure(AppRegistry registry) throws ConfigurationException
 	{
 		try {
-			XPathEvaluator rootEvaluator = new XPathEvaluator(source, xpath);
-			
 			for(Node appNode : rootEvaluator.getNodeList("/config/opensocial-apps/opensocial-app")) {
 				XPathEvaluator appNodeEvaluator = new XPathEvaluator(appNode, xpath);
 				
@@ -79,8 +78,6 @@ public class XmlRegistryConfigurator implements RegistryConfigurator
 	public void configure(ExtensionRegistry registry) throws ConfigurationException
 	{
 		try {
-			XPathEvaluator rootEvaluator = new XPathEvaluator(source);
-			
 			for(String id : rootEvaluator.getNodeValueList("/config/extensions/extension/@id")) {
 				ExtensionPoint extension = (ExtensionPoint) Class.forName(id).newInstance();
 				registry.register(extension);
