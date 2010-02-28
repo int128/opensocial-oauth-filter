@@ -56,7 +56,7 @@ public class XmlRegistryConfiguratorTest
 	public void testApp1() throws Exception
 	{
 		// do
-		final Document xml = setupXML();
+		final Document xml = setupXML("config1.xml");
 		final AppRegistry registry = new AppRegistry();
 		final RegistryConfigurator configurator = new XmlRegistryConfigurator(xml);
 		configurator.configure(registry);
@@ -93,7 +93,7 @@ public class XmlRegistryConfiguratorTest
 	@Test(expected = ConfigurationException.class)
 	public void testApp2() throws Exception
 	{
-		final Document xml = setupXML();
+		final Document xml = setupXML("config2.xml");
 		final AppRegistry registry = new AppRegistry();
 		final RegistryConfigurator configurator = new XmlRegistryConfigurator(xml);
 		configurator.configure(registry);
@@ -102,7 +102,7 @@ public class XmlRegistryConfiguratorTest
 	@Test(expected = ConfigurationException.class)
 	public void testApp3() throws Exception
 	{
-		final Document xml = setupXML();
+		final Document xml = setupXML("config3.xml");
 		final AppRegistry registry = new AppRegistry();
 		final RegistryConfigurator configurator = new XmlRegistryConfigurator(xml);
 		configurator.configure(registry);
@@ -180,9 +180,10 @@ public class XmlRegistryConfiguratorTest
 		assertThat(allExtensions.isEmpty(), is(true));
 	}
 
-	private static Document setupXML() throws SAXException, IOException, ParserConfigurationException
+	private static Document setupXML(String path)
+	throws SAXException, IOException, ParserConfigurationException
 	{
-		final InputStream stream = XmlRegistryConfiguratorTest.class.getResourceAsStream("config1.xml");
+		final InputStream stream = XmlRegistryConfiguratorTest.class.getResourceAsStream(path);
 		final DocumentBuilderFactory df = DocumentBuilderFactory.newInstance();
 		return df.newDocumentBuilder().parse(stream);
 	}
@@ -190,7 +191,7 @@ public class XmlRegistryConfiguratorTest
 	private static ExtensionRegistry setupExtensionRegistry(String path)
 	throws SAXException, IOException, ParserConfigurationException, ConfigurationException
 	{
-		final Document xml = setupXML();
+		final Document xml = setupXML(path);
 		final ExtensionRegistry extensionRegistry = new ExtensionRegistry();
 		final RegistryConfigurator configurator = new XmlRegistryConfigurator(xml);
 		configurator.configure(extensionRegistry);
