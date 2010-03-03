@@ -32,8 +32,8 @@ import org.hidetake.util.oauth.extensionpoint.ExtensionPoint;
 public class ExtensionRegistry
 {
 
-	private final Map<Class<? extends ExtensionPoint>, List<ExtensionPoint>> extensionPointMap =
-		new HashMap<Class<? extends ExtensionPoint>, List<ExtensionPoint>>();
+	private final Map<Class<?>, List<ExtensionPoint>> extensionPointMap =
+		new HashMap<Class<?>, List<ExtensionPoint>>();
 
 	private final List<ExtensionPoint> extensions = new ArrayList<ExtensionPoint>();
 
@@ -52,32 +52,55 @@ public class ExtensionRegistry
 
 	/**
 	 * Register an extension.
+	 * Note that this method only check directly implemented interfaces.
+	 * The interface hierarchy will be ignored.
 	 * @param extension
 	 */
 	public void register(ExtensionPoint extension)
 	{
 		extensions.add(extension);
 		
-		// TODO: consider interface hierarchy
-		for(Class<? extends ExtensionPoint> c : extension.getClass().getInterfaces()) {
-			// find subclass of ExtensionPoint
-			if(ExtensionPoint.class.isAssignableFrom(c)) {
-				List<ExtensionPoint> list = extensionPointMap.get(c);
-				
-				if(list == null) {
-					// first time to register this kind of extension
-					list = new ArrayList<ExtensionPoint>();
-					extensionPointMap.put(c, list);
-				}
-				
-				list.add(extension);
+//		// fast implementation
+//		if(extension instanceof AccessControl) {
+//			register(AccessControl.class, extension);
+//		}
+//		if(extension instanceof FilterInitializing) {
+//			register(FilterInitializing.class, extension);
+//		}
+//		if(extension instanceof RequestURL) {
+//			register(RequestURL.class, extension);
+//		}
+//		if(extension instanceof Validation) {
+//			register(Validation.class, extension);
+//		}
+		
+		// find subclass of ExtensionPoint
+		for(Class<?> kind : extension.getClass().getInterfaces()) {
+			if(ExtensionPoint.class.isAssignableFrom(kind)) {
+				register(kind, extension);
 			}
 		}
 	}
 
 	/**
+	 * Register an extension.
+	 * @param kind class of extension point interface
+	 * @param extension extension object
+	 */
+	public void register(Class<?> kind, ExtensionPoint extension)
+	{
+		List<ExtensionPoint> list = extensionPointMap.get(kind);
+		if(list == null) {
+			// first time to register this kind of extension
+			list = new ArrayList<ExtensionPoint>();
+			extensionPointMap.put(kind, list);
+		}
+		list.add(extension);
+	}
+	
+	/**
 	 * Returns list of specified type extensions.
-	 * @param <I> extension point interface
+	 * @param <I> type of extension point interface
 	 * @param kind
 	 * @return read-only list
 	 */
