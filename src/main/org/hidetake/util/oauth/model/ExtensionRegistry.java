@@ -36,10 +36,6 @@ public class ExtensionRegistry
 		new HashMap<Class<?>, List<ExtensionPoint>>();
 
 	private final List<ExtensionPoint> extensions = new ArrayList<ExtensionPoint>();
-
-	// Constant value for getExtensions()
-	private static final List<ExtensionPoint> emptyList =
-		Collections.unmodifiableList(new ArrayList<ExtensionPoint>());
 	
 	/**
 	 * Reset state of this registry.
@@ -104,19 +100,22 @@ public class ExtensionRegistry
 	 * @param kind
 	 * @return read-only list
 	 */
-	@SuppressWarnings("unchecked")
 	public <I extends ExtensionPoint> Iterable<I> getExtensions(Class<I> kind)
 	{
-		List<I> list = (List<I>) extensionPointMap.get(kind);
+		List<ExtensionPoint> list = extensionPointMap.get(kind);
 		if(list == null) {
-			return (List<I>) emptyList;
+			return Collections.emptyList();
 		}
-		return list;
+		
+		@SuppressWarnings("unchecked")
+		List<I> result = (List<I>) list;
+		
+		return result;
 	}
 
 	/**
 	 * Returns list of all extensions.
-	 * @return read-only set object
+	 * @return read-only list
 	 */
 	public List<ExtensionPoint> getExtensions()
 	{
