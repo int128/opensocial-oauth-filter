@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -51,6 +52,29 @@ import static org.hamcrest.CoreMatchers.*;
 
 public class XmlRegistryConfiguratorTest
 {
+
+	@Test
+	public void time() throws Exception
+	{
+		final Logger logger = Logger.getLogger(XmlRegistryConfiguratorTest.class.getName());
+		long baseTime;
+
+		baseTime = System.currentTimeMillis();
+		final Document xml = setupXML("config1.xml");
+		logger.info("setupXML: " + (System.currentTimeMillis() - baseTime) + " ms");
+		
+		final AppRegistry appRegistry = new AppRegistry();
+		final ExtensionRegistry extensionRegistry = new ExtensionRegistry();
+		final RegistryConfigurator configurator = new XmlRegistryConfigurator(xml);
+		
+		baseTime = System.currentTimeMillis();
+		configurator.configure(appRegistry);
+		logger.info("configureAppRegistry: " + (System.currentTimeMillis() - baseTime) + " ms");
+		
+		baseTime = System.currentTimeMillis();
+		configurator.configure(extensionRegistry);
+		logger.info("configureExtensionRegistry: " + (System.currentTimeMillis() - baseTime) + " ms");
+	}
 
 	@Test
 	public void testApp1() throws Exception
