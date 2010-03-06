@@ -19,6 +19,12 @@ import net.oauth.OAuthAccessor;
 import net.oauth.OAuthConsumer;
 import net.oauth.signature.RSA_SHA1;
 
+/**
+ * Represents an OpenSocial application.
+ * 
+ * @author hidetake.org
+ *
+ */
 public class OpenSocialApp
 {
 
@@ -26,6 +32,12 @@ public class OpenSocialApp
 	private final String appUrl;
 	private final OAuthAccessor oauthAccessor;
 
+	/**
+	 * Create an accessor object which uses RSA-SHA1 signature.
+	 * @param consumerKey
+	 * @param certificate
+	 * @return
+	 */
 	public static OAuthAccessor createOAuthAccessorRSASHA1(String consumerKey, String certificate)
 	{
 		OAuthConsumer consumer = new OAuthConsumer(null, consumerKey, null, null);
@@ -34,6 +46,12 @@ public class OpenSocialApp
 		return oauthAccessor;
 	}
 	
+	/**
+	 * Constructor.
+	 * @param appId application ID
+	 * @param appUrl application XML URL
+	 * @param oauthAccessor OpenSocial container
+	 */
 	public OpenSocialApp(String appId, String appUrl, OAuthAccessor oauthAccessor)
 	{
 		this.appId = appId;
@@ -41,16 +59,28 @@ public class OpenSocialApp
 		this.oauthAccessor = oauthAccessor;
 	}
 
+	/**
+	 * Returns the application ID.
+	 * @return
+	 */
 	public final String getAppId()
 	{
 		return appId;
 	}
 	
+	/**
+	 * Returns the application XML URL.
+	 * @return
+	 */
 	public final String getAppUrl()
 	{
 		return appUrl;
 	}
 
+	/**
+	 * Returns the accessor object which represents OpenSocial container.
+	 * @return
+	 */
 	public OAuthAccessor getOAuthAccessor()
 	{
 		return oauthAccessor;
