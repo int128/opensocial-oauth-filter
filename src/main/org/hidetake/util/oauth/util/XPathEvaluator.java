@@ -40,22 +40,41 @@ public class XPathEvaluator
 	private final Node targetNode;
 	private final XPath xpath;
 
+	/**
+	 * Create a XPath object.
+	 * @return xpath
+	 */
 	public static final XPath createXPath()
 	{
 		return XPathFactory.newInstance().newXPath();
 	}
 	
+	/**
+	 * Constructor.
+	 * @param targetNode XML node
+	 */
 	public XPathEvaluator(Node targetNode)
 	{
 		this(targetNode, createXPath());
 	}
 	
+	/**
+	 * Constructor.
+	 * @param targetNode XML node
+	 * @param xpath XPath object
+	 */
 	public XPathEvaluator(Node targetNode, XPath xpath)
 	{
 		this.targetNode = targetNode;
 		this.xpath = xpath;
 	}
 
+	/**
+	 * Returns nodes which the expression matches.
+	 * @param expression XPath expression
+	 * @return nodes
+	 * @throws NoSuchNodeException
+	 */
 	public Iterable<Node> getNodeList(String expression) throws NoSuchNodeException
 	{
 		try {
@@ -95,6 +114,12 @@ public class XPathEvaluator
 		}
 	}
 
+	/**
+	 * Returns node values which the expression matches.
+	 * @param expression XPath expression
+	 * @return node values
+	 * @throws NoSuchNodeException
+	 */
 	public Iterable<String> getNodeValueList(String expression) throws NoSuchNodeException
 	{
 		try {
@@ -134,6 +159,12 @@ public class XPathEvaluator
 		}
 	}
 
+	/**
+	 * Returns an node which the expression matches.
+	 * @param expression
+	 * @return XML node object
+	 * @throws NoSuchNodeException
+	 */
 	public Node getNode(String expression) throws NoSuchNodeException
 	{
 		try {
@@ -148,11 +179,21 @@ public class XPathEvaluator
 		}
 	}
 
+	/**
+	 * Returns an node value which the expression matches.
+	 * @param expression
+	 * @return node value string
+	 * @throws NoSuchNodeException
+	 */
 	public String getString(String expression) throws NoSuchNodeException
 	{
 		return getNode(expression).getNodeValue();
 	}
 
+	/**
+	 * Set variable map. Variables are given in expression, for example <code>$id</code>.
+	 * @param variableMap map of variable name, actual value
+	 */
 	public void setVariable(final Map<QName, Object> variableMap)
 	{
 		xpath.setXPathVariableResolver(new XPathVariableResolver()
