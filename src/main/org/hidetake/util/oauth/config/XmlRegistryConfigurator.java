@@ -38,7 +38,7 @@ import org.w3c.dom.Node;
  * @author hidetake.org
  *
  */
-public class XmlRegistryConfigurator extends AbstractRegistryConfigurator
+public class XmlRegistryConfigurator implements RegistryConfigurator
 {
 
 	private final XPathEvaluator rootEvaluator;
@@ -131,7 +131,7 @@ public class XmlRegistryConfigurator extends AbstractRegistryConfigurator
 				String consumerKey = containerEvaluator.getString("./oauth/@consumer-key");
 				String cert = containerEvaluator.getString("./oauth/certificate/text()").trim();
 				
-				return createAccessorRSASHA1(consumerKey, cert);
+				return OpenSocialApp.createOAuthAccessorRSASHA1(consumerKey, cert);
 			}
 			catch (NoSuchNodeException e) {
 				throw new ConfigurationException("No key or certificate found");

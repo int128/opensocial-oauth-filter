@@ -16,6 +16,8 @@
 package org.hidetake.util.oauth.model;
 
 import net.oauth.OAuthAccessor;
+import net.oauth.OAuthConsumer;
+import net.oauth.signature.RSA_SHA1;
 
 public class OpenSocialApp
 {
@@ -23,6 +25,14 @@ public class OpenSocialApp
 	private final String appId;
 	private final String appUrl;
 	private final OAuthAccessor oauthAccessor;
+
+	public static OAuthAccessor createOAuthAccessorRSASHA1(String consumerKey, String certificate)
+	{
+		OAuthConsumer consumer = new OAuthConsumer(null, consumerKey, null, null);
+		consumer.setProperty(RSA_SHA1.X509_CERTIFICATE, certificate);
+		OAuthAccessor oauthAccessor = new OAuthAccessor(consumer);
+		return oauthAccessor;
+	}
 	
 	public OpenSocialApp(String appId, String appUrl, OAuthAccessor oauthAccessor)
 	{
