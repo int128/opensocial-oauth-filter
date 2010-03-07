@@ -55,7 +55,7 @@ import org.xml.sax.SAXException;
  * <code><pre>
  *  &lt;filter&gt;
  *      &lt;filter-name&gt;opensocial-oauth-filter&lt;/filter-name&gt;
- *      &lt;filter-class&gt;org.hidetake.opensocial.filter.OpenSocialRequestValidationFilter&lt;/filter-class&gt;
+ *      &lt;filter-class&gt;org.hidetake.opensocial.filter.RequestValidationFilter&lt;/filter-class&gt;
  *  &lt;/filter&gt;
  * </pre></code>
  * </p>
@@ -63,7 +63,7 @@ import org.xml.sax.SAXException;
  * @author hidetake.org
  *
  */
-public class OpenSocialRequestValidationFilter implements Filter
+public class RequestValidationFilter implements Filter
 {
 
 	private OpenSocialRequestValidator validator;
