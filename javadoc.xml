@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="javadoc">
-    <target name="javadoc">
-        <javadoc access="protected" additionalparam="-encoding UTF-8 " author="true" classpath="target/test/classes;D:\home\.m2\repository\javax\servlet\servlet-api\2.5\servlet-api-2.5.jar;webapp/WEB-INF/lib/oauth-core-20090105.jar;D:\home\.m2\repository\junit\junit\4.7\junit-4.7.jar" destdir="../opensocial-oauth-filter-site/javadoc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="org.hidetake.util.oauth.provider,org.hidetake.util.oauth.test,org.hidetake.util.oauth.listener" source="1.6" sourcefiles="src/main/org/hidetake/util/oauth/ValidationEventListener.java,src/main/org/hidetake/util/oauth/OAuthValidationFilter.java" sourcepath="src/main;src/test" splitindex="true" use="true" version="true">
-            <link href="http://java.sun.com/javase/6/docs/api/"/>
-        </javadoc>
-    </target>
-</project>
