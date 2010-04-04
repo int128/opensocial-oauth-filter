@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hidetake.opensocial.filter.test;
+package org.hidetake.opensocial.filter.test.model;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
@@ -21,6 +21,7 @@ import static org.junit.Assert.*;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hidetake.opensocial.filter.model.OpenSocialRequest;
+import org.hidetake.opensocial.filter.test.HttpServletRequestStub;
 import org.junit.Test;
 
 public class OpenSocialRequestTest
