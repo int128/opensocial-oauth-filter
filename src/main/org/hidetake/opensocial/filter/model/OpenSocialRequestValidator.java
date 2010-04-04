@@ -70,14 +70,26 @@ public class OpenSocialRequestValidator
 	private void validateSingle(OpenSocialRequest openSocialRequest, OpenSocialApp app)
 	throws OpenSocialException
 	{
-		// validate application id
-		if(!openSocialRequest.getAppId().equals(app.getAppId())) {
+		if(app.getAppId() == null) {
+			// ignore opensocial_app_id
+		}
+		else if(openSocialRequest.getAppId().equals(app.getAppId())) {
+			// validation passed
+		}
+		else {
+			// mismatch
 			throw new OpenSocialException(
 				"Invalid " + OpenSocialRequest.OPENSOCIAL_APP_ID + ": " + openSocialRequest.getAppId());
 		}
 		
-		// validate application URL
-		if(!openSocialRequest.getAppUrl().equals(app.getAppUrl())) {
+		if(app.getAppUrl() == null) {
+			// ignore opensocial_app_url
+		}
+		else if(openSocialRequest.getAppUrl().equals(app.getAppUrl())) {
+			// validation passed
+		}
+		else {
+			// mismatch
 			throw new OpenSocialException(
 				"Invalid " + OpenSocialRequest.OPENSOCIAL_APP_URL + ": " + openSocialRequest.getAppUrl());
 		}

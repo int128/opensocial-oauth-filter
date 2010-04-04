@@ -16,10 +16,10 @@
 package org.hidetake.opensocial.filter.test.config;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import net.oauth.OAuthAccessor;
 import net.oauth.signature.RSA_SHA1;
@@ -61,7 +61,7 @@ public class MyRegistryConfiguratorTest
 		+ "-----END CERTIFICATE-----";
 
 	@Test
-	public void testConfigure() throws Exception
+	public void test1() throws Exception
 	{
 		final RegistryConfigurator configurator = new RegistryConfigurator()
 		{
@@ -83,17 +83,8 @@ public class MyRegistryConfiguratorTest
 		final AppRegistry appRegistry = new AppRegistry();
 		final ExtensionRegistry extensionRegistry = new ExtensionRegistry();
 
-		//
-		final Logger logger = Logger.getLogger(XmlRegistryConfiguratorTest.class.getName());
-		long baseTime;
-		
-		baseTime = System.currentTimeMillis();
 		configurator.configure(appRegistry);
-		logger.info("configureAppRegistry: " + (System.currentTimeMillis() - baseTime) + " ms");
-		
-		baseTime = System.currentTimeMillis();
 		configurator.configure(extensionRegistry);
-		logger.info("configureExtensionRegistry: " + (System.currentTimeMillis() - baseTime) + " ms");
 
 		// verify
 		{
@@ -103,6 +94,54 @@ public class MyRegistryConfiguratorTest
 			final OpenSocialApp openSocialApp = list.get(0);
 			assertThat(openSocialApp.getAppId(), is("test"));
 			assertThat(openSocialApp.getAppUrl(), is("http://www.example.com/apps/test"));
+			
+			final OAuthAccessor oauthAccessor = openSocialApp.getOAuthAccessor();
+			assertThat(oauthAccessor.consumer.consumerKey, is("mixi.jp"));
+			assertThat((String) oauthAccessor.consumer.getProperty(RSA_SHA1.X509_CERTIFICATE), is(cert));
+		}
+		
+		{
+			assertThat(size(extensionRegistry.getExtensions(AccessControl.class)), is(1));
+			assertThat(size(extensionRegistry.getExtensions(FilterInitializing.class)), is(1));
+			assertThat(size(extensionRegistry.getExtensions(RequestURL.class)), is(0));
+			assertThat(size(extensionRegistry.getExtensions(Validation.class)), is(1));
+		}
+	}
+
+	@Test
+	public void test2() throws Exception
+	{
+		final RegistryConfigurator configurator = new RegistryConfigurator()
+		{
+			public void configure(AppRegistry registry) throws ConfigurationException
+			{
+				registry.register(new OpenSocialApp(
+						null,
+						null,
+						OpenSocialApp.createOAuthAccessorRSASHA1("mixi.jp", cert)));
+			}
+
+			public void configure(ExtensionRegistry registry) throws ConfigurationException
+			{
+				registry.register(new ValidationLogger());
+				registry.register(new AllowLocalhost());
+			}
+		};
+		
+		final AppRegistry appRegistry = new AppRegistry();
+		final ExtensionRegistry extensionRegistry = new ExtensionRegistry();
+
+		configurator.configure(appRegistry);
+		configurator.configure(extensionRegistry);
+
+		// verify
+		{
+			final List<OpenSocialApp> list = appRegistry.getApps();
+			assertThat(list.size(), is(1));
+			
+			final OpenSocialApp openSocialApp = list.get(0);
+			assertThat(openSocialApp.getAppId(), nullValue());
+			assertThat(openSocialApp.getAppUrl(), nullValue());
 			
 			final OAuthAccessor oauthAccessor = openSocialApp.getOAuthAccessor();
 			assertThat(oauthAccessor.consumer.consumerKey, is("mixi.jp"));

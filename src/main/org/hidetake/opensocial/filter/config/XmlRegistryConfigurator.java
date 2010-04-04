@@ -61,6 +61,14 @@ public class XmlRegistryConfigurator implements RegistryConfigurator
 				String appUrl = appNodeEvaluator.getString("./@app-url");
 				String containerId = appNodeEvaluator.getString("./@container-id");
 				
+				// wildcard
+				if("*".equals(appId)) {
+					appId = null;
+				}
+				if("*".equals(appUrl)) {
+					appUrl = null;
+				}
+				
 				// get oauth data
 				OAuthAccessor oauthAccessor = getOAuthAccessor(containerId);
 				

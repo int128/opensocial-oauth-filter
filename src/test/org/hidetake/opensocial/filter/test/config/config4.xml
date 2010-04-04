@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://xmlns.hidetake.org/opensocial-oauth-filter"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.hidetake.org/opensocial-oauth-filter opensocial-oauth-filter.xsd">
+
+	<extensions>
+	</extensions>
+
+	<opensocial-apps>
+		<opensocial-app
+			app-id="*"
+			app-url="*"
+			container-id="dummy" />
+	</opensocial-apps>
+
+	<opensocial-containers>
+		<opensocial-container id="dummy">
+			<oauth consumer-key="dummy" signature-method="RSA-SHA1">
+				<certificate><![CDATA[dummy]]></certificate>
+			</oauth>
+		</opensocial-container>
+	</opensocial-containers>
+
+</config>
