@@ -5,7 +5,7 @@
 	<groupId>org.hidetake</groupId>
 	<artifactId>opensocial-oauth-filter</artifactId>
 	<name>opensocial-oauth-filter</name>
-	<version>0.6</version>
+	<version>0.7</version>
 	<description>Servlet filter to validate the OpenSocial request</description>
 	<url>http://code.google.com/p/opensocial-oauth-filter/</url>
 	<scm>
