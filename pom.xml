@@ -1,12 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.hidetake</groupId>
 	<artifactId>opensocial-oauth-filter</artifactId>
 	<name>opensocial-oauth-filter</name>
-	<version>0.7</version>
-	<description>Servlet filter to validate the OpenSocial request</description>
+	<version>1.0</version>
+	<description>Signature validation filter for OpenSocial server-side application</description>
 	<url>http://code.google.com/p/opensocial-oauth-filter/</url>
 	<scm>
 		<connection>scm:svn:https://opensocial-oauth-filter.googlecode.com/svn/trunk/</connection>
@@ -17,7 +16,7 @@
 		<directory>target</directory>
 		<sourceDirectory>src/main</sourceDirectory>
 		<testSourceDirectory>src/test</testSourceDirectory>
-		<outputDirectory>webapp/WEB-INF/classes</outputDirectory>
+		<outputDirectory>target/main/classes</outputDirectory>
 		<testOutputDirectory>target/test/classes</testOutputDirectory>
 		<resources>
 		</resources>
@@ -37,6 +36,34 @@
 					</includes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/lib/oauth-core/commons/src/main/java</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
@@ -45,7 +72,7 @@
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
 			<type>jar</type>
-			<scope>test</scope>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
